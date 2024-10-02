@@ -1,0 +1,70 @@
+/* width */
+
+/* npx tailwindcss -i ./src/styles/original/combined.css -o ./src/styles/tailwind/compiled.css --watch */
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* Track */
+
+::-webkit-scrollbar-track {
+  background: #ffffff00;
+}
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+  background: #272727;
+}
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Hidden Feature Page CSS Start Here */
+
+.uploadMainDiv {
+  width: calc(100% - 348px);
+  height: 100vh;
+}
+
+.stepDiv {
+  background-color: #dfdfdf54;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  cursor: pointer;
+}
+
+.verticalCenterTheElement {
+  display: flex;
+  align-items: center;
+}
+
+.contentDiv {
+  width: 100%;
+}
+
+.slideButtonMainDiv {
+}
+
+/* Hidden Feature Page CSS Ends Here */
+
+/* Dashboard and all its components are here styled */

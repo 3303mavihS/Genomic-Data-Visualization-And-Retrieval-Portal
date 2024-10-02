@@ -1,0 +1,164 @@
+import * as React from "react";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
+import { useSelector, useDispatch } from "react-redux";
+import { setToggleDialogBox } from "../../state-management/feature/elementReducer";
+import { serverGetTheGeneDataByNextPrevBtn } from "../services/mainAppApiCallConstants";
+import { setGeneData } from "../../state-management/feature/dataReducer";
+
+const DialogBox = ({ dialogData }) => {
+  const openDialogBox = useSelector((state) => state.element.toggleDialogBox);
+  //const dialogData = useSelector((state) => state.globalData.geneData);
+  const dispatch = useDispatch();
+  // console.log(dialogData);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+
+  const handleClose = () => {
+    dispatch(setToggleDialogBox(false));
+  };
+
+  const handleBtnClick = async (slno) => {
+    try {
+      //code
+      // console.log(slno);
+      const url = serverGetTheGeneDataByNextPrevBtn + "?gene_slno=" + slno;
+      // console.log(url);
+      const response = await fetch(url);
+      if (response.status === 200) {
+        const data = await response.json();
+        // console.log(data);
+        dispatch(setGeneData(data));
+      }
+    } catch (err) {
+      console.log("error_message : ", err.message);
+    }
+  };
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        alert("Copied to clipboard!");
+      })
+      .catch((err) => {
+        console.error("Failed to copy: ", err);
+      });
+  };
+
+  return (
+    <React.Fragment>
+      <Dialog
+        scroll="paper"
+        fullScreen={fullScreen}
+        maxWidth="md"
+        open={openDialogBox}
+        onClose={handleClose}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <Box component="div">
+          <DialogTitle
+            id="responsive-dialog-title"
+            sx={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <ArrowBackIosIcon
+              sx={{ cursor: "pointer" }}
+              onClick={() => handleBtnClick(parseInt(dialogData?.SlNo) - 1)}
+            />
+            {dialogData?.Label}
+            <ArrowForwardIosIcon
+              sx={{ cursor: "pointer" }}
+              onClick={() => handleBtnClick(parseInt(dialogData?.SlNo) + 1)}
+            />
+          </DialogTitle>
+        </Box>
+        <DialogContent dividers={scroll === "paper"}>
+          <TableContainer component={Paper}>
+            <Table sx={{ tableLayout: "fixed" }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Property</TableCell>
+                  <TableCell align="right" sx={{ width: "500px" }}>
+                    Value
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {/* Map the gene data object into table rows */}
+                {Object.entries(dialogData).map(([key, value]) => (
+                  <TableRow key={key}>
+                    <TableCell component="th" scope="row">
+                      {key}
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{
+                        width: "500px",
+                        wordWrap: "break-word",
+                        overflowX: "scroll",
+                        overflowY: "hidden",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {value !== "" ? (
+                        <>
+                          <ContentCopyIcon
+                            sx={{
+                              color: "#aeaeae",
+                              width: "20px",
+                              height: "20px",
+                              marginBottom: "-4px",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => copyToClipboard(value)}
+                          />
+                          &nbsp;&nbsp;&nbsp;&nbsp;{value}
+                        </>
+                      ) : (
+                        "N/A"
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            size="medium"
+            autoFocus
+            onClick={handleClose}
+          >
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </React.Fragment>
+  );
+};
+
+export default DialogBox;
