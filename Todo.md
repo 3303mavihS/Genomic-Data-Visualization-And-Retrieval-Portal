@@ -6,6 +6,14 @@ Structure :
 
 ### Features :
 
+### Hidden Feature
+
+--- Upload hidden feature will contain a form that will first take the bacteria name and then some description about it
+--- then it will prompt to ask how many chromosome of that bacteria will be created
+--- then we will take the name description, any photo, or image and then csv file of the data
+--- then we will upload the data and after that we will upload the file to the server and read the file to show it to the user
+--- and then on completion we will verify the data and then save it to the database one by one
+
 ### \*\*\* MiniMap (if Possible)
 
 --- It will show a vertical representation of whole data in one go and only for data not for search results
