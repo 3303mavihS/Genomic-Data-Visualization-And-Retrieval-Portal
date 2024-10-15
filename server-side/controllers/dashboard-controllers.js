@@ -195,6 +195,7 @@ export const returnGeneDataByNextPrevBtn = async (req, res) => {
   }
 };
 
+//return the gene data by based on sequence
 export const returnGeneBySeq = async (req, res) => {
   try {
     //code
@@ -217,6 +218,83 @@ export const returnGeneBySeq = async (req, res) => {
     }
   } catch (err) {
     console.error(err.message);
+    res.status(500).json({ error_message: err.message });
+  }
+};
+
+//return the data by gene length
+export const returnGeneByLength = async (req, res) => {
+  try {
+    const { gene_min_length, gene_max_length } = req.query;
+
+    // Validate that both parameters are provided
+    if (!gene_min_length || !gene_max_length) {
+      return res.status(400).json({
+        error_message:
+          "Please provide both gene_min_length and gene_max_length",
+      });
+    }
+
+    // Log the received lengths for debugging
+    console.log(
+      "Received min and max length: ",
+      gene_min_length,
+      gene_max_length
+    );
+
+    // Access the collection
+    const collection = database.collection("modified_ralstoniagenedetails");
+
+    // Use aggregation to convert Length to a number and filter by range
+    const genes = await collection
+      .aggregate([
+        {
+          $addFields: {
+            numericLength: { $toDouble: "$Length" }, // Convert Length to number
+          },
+        },
+        {
+          $match: {
+            numericLength: {
+              $gte: parseInt(gene_min_length), // Ensure length is greater than or equal to gene_min_length
+              $lte: parseInt(gene_max_length), // Ensure length is less than or equal to gene_max_length
+            },
+          },
+        },
+      ])
+      .toArray(); // Convert the aggregation cursor to an array
+
+    // Check if any genes were found
+    if (genes.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No genes found in the specified length range" });
+    }
+
+    // Find the last document, sorted by _id to get the most recent
+    const lastDocument = await collection
+      .find()
+      .sort({ _id: -1 }) // Sort by _id in descending order
+      .limit(1) // Limit to one document
+      .toArray(); // Convert cursor to array
+
+    // Check if a document was found
+    if (lastDocument.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No documents found in the collection" });
+    }
+
+    // Extract the End value from the last document
+    const endValue = lastDocument[0].End;
+
+    // Return both the genes and the End value of the last document
+    return res.status(200).json({
+      genes,
+      lastDocumentEndValue: endValue,
+    });
+  } catch (err) {
+    console.log(err.message);
     res.status(500).json({ error_message: err.message });
   }
 };

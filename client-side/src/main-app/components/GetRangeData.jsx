@@ -196,7 +196,7 @@ const GetRangeData = () => {
               value={beginValue}
               onChange={(e) => {
                 setBeginValue(e.target.value);
-                console.log(e.target.value);
+                //console.log(e.target.value);
               }}
             />
             <TextField
@@ -208,7 +208,7 @@ const GetRangeData = () => {
               value={endValue}
               onChange={(e) => {
                 setEndValue(e.target.value);
-                console.log(e.target.value);
+                //console.log(e.target.value);
               }}
             />
             <FormControl sx={{ width: "100px" }}>

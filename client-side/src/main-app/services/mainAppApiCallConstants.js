@@ -16,6 +16,10 @@ export const serverSlideUrl = mainDomain + "/data/slide";
 //url to get the range data with the Begin and End Point for the whole canvas
 export const serverGetRangeDataUrl = mainDomain + "/data/get-range-data";
 
+//url to get the data between a length a range
+export const serverGetLengthRangeDataUrl =
+  mainDomain + "/data/get-gene-data-by-length";
+
 //url to get the data from the database for the exact row
 export const serverGetTheGeneData = mainDomain + "/data/get-gene-data";
 

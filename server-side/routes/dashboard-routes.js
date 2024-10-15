@@ -1,6 +1,7 @@
 import express from "express";
 import {
   returnFirstWindowData,
+  returnGeneByLength,
   returnGeneBySeq,
   returnGeneData,
   returnGeneDataByNextPrevBtn,
@@ -20,6 +21,7 @@ router.get("/genome-data", returnFirstWindowData);
 router.get("/calculate-slides", returnLastPointOfData);
 router.get(`/slide/:slideNo/params`, returnSlideData);
 router.get("/get-range-data", returnGetRangeData);
+router.get("/get-gene-data-by-length", returnGeneByLength);
 router.get("/get-gene-data", returnGeneData);
 router.get("/get-gene-data/by-slno", returnGeneDataByNextPrevBtn);
 router.post("/get-gene-data-by-seq", returnGeneBySeq);
