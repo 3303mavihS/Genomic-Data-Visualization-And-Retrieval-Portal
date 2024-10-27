@@ -14,7 +14,7 @@ export const serverGetLastEndPoint = mainDomain + "/data/calculate-slides";
 export const serverSlideUrl = mainDomain + "/data/slide";
 
 //url to get the range data with the Begin and End Point for the whole canvas
-export const serverGetRangeDataUrl = mainDomain + "/data/get-range-data";
+export const serverSearchByGenePositionRangeUrl = mainDomain + "/data/get-range-data";
 
 //url to get the data between a length a range
 export const serverGetLengthRangeDataUrl =
@@ -30,3 +30,6 @@ export const serverGetTheGeneDataByNextPrevBtn =
 //url to get the gene data from the database from the nucleotide seq.
 export const serverGetTheGeneDataByNucSeq =
   mainDomain + "/data/get-gene-data-by-seq";
+
+//url to get the gene sequence from the database as the file
+export const serverExportGeneSequenceUrl = mainDomain + "/data/export-gene-sequence";

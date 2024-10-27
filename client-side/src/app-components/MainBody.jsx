@@ -4,11 +4,12 @@ import { Routes, Route } from "react-router-dom";
 import MainApp from "../main-app/components/MainApp";
 import AddData from "../hidden-feature/components/AddData";
 import DialogBox from "../main-app/components/DialogBox";
-import GetRangeData from "../main-app/components/GetRangeData";
-import GetLengthData from "../main-app/components/GetLengthData";
+import SearchByGenePositionRange from "../main-app/components/SearchByGenePositionRange";
+import SearchByGeneSize from "../main-app/components/SearchByGeneSize";
 import SearchFromData from "../main-app/components/SearchFromData";
-import SearchBySequence from "../main-app/components/SearchBySequence";
+import SearchByGeneSequence from "../main-app/components/SearchByGeneSequence";
 import { useSelector } from "react-redux";
+import ExportGeneSequence from "../main-app/components/ExportGeneSequence";
 
 const MainBody = ({ component, sx }) => {
   const dialogData = useSelector((state) => state.globalData.geneData);
@@ -25,14 +26,15 @@ const MainBody = ({ component, sx }) => {
           element={<SearchFromData />}
         />
         <Route
-          path="/:genomeName/search-by-length"
-          element={<GetLengthData />}
+          path="/:genome-name/search-by-gene-size"
+          element={<SearchByGeneSize />}
         />
         <Route
           path="/:genomeName/search-by-nucleotide-seq"
-          element={<SearchBySequence />}
+          element={<SearchByGeneSequence />}
         />
-        <Route path="/:genomeName/search-in-range" element={<GetRangeData />} />
+        <Route path="/:genome-name/search-in-position-range" element={<SearchByGenePositionRange />} />
+        <Route path="/:genome-name/export-gene-sequence" element={<ExportGeneSequence />} />
         <Route path="/add-new-genome-data" element={<AddData />} />
       </Routes>
     </Box>

@@ -1,5 +1,12 @@
 import { database } from "../app.js";
 import { ObjectId } from "mongodb";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from "url";
+
+//file path constants
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 //this will return the data to show on the first load of data
 export const returnFirstWindowData = async (req, res) => {
@@ -99,7 +106,7 @@ export const returnSlideData = async (req, res) => {
 };
 
 //this function will take the query values so that it can return the data between the range
-export const returnGetRangeData = async (req, res) => {
+export const returnSearchByGenePositionRange = async (req, res) => {
   try {
     //code
     const begin = parseInt(req.query.begin, 10); // Convert begin to an integer
@@ -298,3 +305,46 @@ export const returnGeneByLength = async (req, res) => {
     res.status(500).json({ error_message: err.message });
   }
 };
+
+//export the gene sequence based on start and end index
+export const exportGeneSequence = async (req,res)=>{
+  const { beginIndex, endIndex } = req.query;
+  console.log(beginIndex,endIndex);
+
+  // Check if indices are provided and are valid numbers
+  if (!beginIndex || !endIndex || isNaN(beginIndex) || isNaN(endIndex)) {
+    return res.status(400).send("Invalid indices provided.");
+  }
+
+  try {
+    // Step 1: Read the sequence from the local file
+    const filePath = path.join(__dirname, "../data/export/genome/ras_bact_gene_sequence_text.txt");
+    console.log(filePath);
+    const fullSequence = fs.readFileSync(filePath, "utf8");
+
+    // Step 2: Extract the substring based on provided indices
+    const sequencePart = fullSequence.substring(
+      parseInt(beginIndex),
+      parseInt(endIndex)
+    );
+
+    const file_content = "modified_ralstoniagenedetails->"+sequencePart;
+
+    // Step 3: Create a temporary file with the extracted sequence
+    const tempFilePath = path.join(__dirname, "temp_sequence.txt");
+    fs.writeFileSync(tempFilePath, file_content);
+
+    // Step 4: Send the file as a download
+    res.download(tempFilePath, "extracted_sequence.txt", (err) => {
+      if (err) {
+        console.log("Error downloading file:", err);
+      }
+      // Delete the temporary file after sending it
+      fs.unlinkSync(tempFilePath);
+    });
+  }catch (err) {
+    console.log(err.message);
+    res.status(500).json({ error_message: err.message });
+  }
+
+}

@@ -17,7 +17,7 @@ import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { serverGetTheGeneDataByNucSeq } from "../services/mainAppApiCallConstants";
 
-const SearchBySequence = () => {
+const SearchByGeneSequence = () => {
   const ref = useRef(null);
   const [seq, setSeq] = useState("");
   const [dataRec, setDataRec] = useState(null);
@@ -79,16 +79,34 @@ const SearchBySequence = () => {
             sx={{
               width: "100%",
               textAlign: "right",
-              alignItems: "center",
+              alignItems: "start",
               justifyContent: "space-between",
             }}
           >
-            <Typography
-              variant="h1"
-              sx={{ fontSize: "32px", fontWeight: "700" }}
+            <Box
+              component="div"
+              sx={{
+                width: "100%",
+                textAlign: "left",
+              }}
             >
-              Get Gene By Nuclueotide Sequence
-            </Typography>
+              <Typography
+                variant="h1"
+                sx={{ fontSize: "32px", fontWeight: "700" }}
+              >
+                Search By Gene Sequence
+              </Typography>
+
+              <Typography
+                variant="body1"
+                sx={{ mt: 2, color: "#444" }}
+                gutterBottom
+              >
+                Input a specific gene sequence to directly access detailed
+                information on matching genes, streamlining access to
+                sequence-specific data.
+              </Typography>
+            </Box>
             <Button variant="contained" size="large" download>
               <FormatAlignCenterOutlinedIcon />
             </Button>
@@ -202,4 +220,4 @@ const SearchBySequence = () => {
   );
 };
 
-export default SearchBySequence;
+export default SearchByGeneSequence;

@@ -14,38 +14,35 @@ import Canvas from "./canvas-component/Canvas";
 import FormatAlignCenterOutlinedIcon from "@mui/icons-material/FormatAlignCenterOutlined";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import {
-  serverGetLengthRangeDataUrl,
-  serverGetRangeDataUrl,
+  serverSearchByGenePositionRangeUrl,
   serverSlideUrl,
 } from "../services/mainAppApiCallConstants";
 
-const validateInputs = (min, max) => {
-  const maxLimit = 5000;
+const validateInputs = (begin, end) => {
+  const maxLimit = 3022314;
 
   // Ensure values are numbers
-  min = Number(min);
-  max = Number(max);
+  begin = Number(begin);
+  end = Number(end);
 
-  if (isNaN(min) || isNaN(max)) {
+  if (isNaN(begin) || isNaN(end)) {
     alert("Begin and End values must be valid numbers.");
     return false;
   }
 
-  if (min < 0 || max < 0) {
-    alert("Min Length and Max Length values cannot be negative numbers.");
+  if (begin < 0 || end < 0) {
+    alert("Begin and End values cannot be negative numbers.");
     return false;
   }
 
-  if (min >= max) {
-    alert(
-      "Min Length value cannot be greater than or equal to Max Length value."
-    );
+  if (begin >= end) {
+    alert("Begin value cannot be greater than or equal to End value.");
     return false;
   }
 
-  if (min > maxLimit || max > maxLimit) {
+  if (begin > maxLimit || end > maxLimit) {
     alert(
-      `Min Length and Max Length values cannot exceed the maximum limit of ${maxLimit}.`
+      `Begin and End values cannot exceed the maximum limit of ${maxLimit}.`
     );
     return false;
   }
@@ -55,40 +52,36 @@ const validateInputs = (min, max) => {
 
 const rectHeight = 23; // Height for all rectangles
 
-const GetLengthData = () => {
+const SearchByGenePositionRange = () => {
   const ref = useRef(null);
-  const [minLength, setMinLength] = useState("");
-  const [maxLength, setMaxLength] = useState("");
+  const [beginValue, setBeginValue] = useState("");
+  const [endValue, setEndValue] = useState("");
   const [strandValue, setStrandValue] = useState("both");
   const [canvasWidth, setCanvasWidth] = useState(0);
   const [dataRec, setDataRec] = useState(null);
   const [activeKey, setActiveKey] = useState(1);
-  const [slideBegin, setSlideBegin] = useState(1);
+  const [slideBegin, setSlideBegin] = useState(dataRec?.range.adjustedBegin);
   const [slideEnd, setSlideEnd] = useState(100000);
-  const [lastPoint, setLastPoint] = useState();
 
-  const getLengthRangeData = async (min, max) => {
-    const valid = validateInputs(min, max);
+  const getGenePositionRange = async (begin, end) => {
+    const valid = validateInputs(begin, end);
     if (valid) {
       try {
         //do the working
         const url =
-          serverGetLengthRangeDataUrl +
-          "?gene_min_length=" +
-          minLength +
-          "&gene_max_length=" +
-          maxLength;
+          serverSearchByGenePositionRangeUrl +
+          "?begin=" +
+          begin +
+          "&end=" +
+          end;
         console.log(url);
         const response = await fetch(url);
         if (response.status === 200) {
           const data = await response.json();
           console.log(data);
           setDataRec(data);
-          // setSlideBegin(data?.range.adjustedBegin + 1);
-          // setSlideEnd(data?.range.adjustedBegin + 100000);
-          setSlideBegin(1);
-          setSlideEnd(100000);
-          setLastPoint(data?.lastDocumentEndValue);
+          setSlideBegin(data?.range.adjustedBegin + 1);
+          setSlideEnd(data?.range.adjustedBegin + 100000);
         }
       } catch (err) {
         console.log("error_message : ", err.message);
@@ -97,11 +90,11 @@ const GetLengthData = () => {
   };
 
   // fetch the slide data to pass in the canvas by passing the slide start and end point
-  const clickToGoSlide = async (key) => {
+  const clickToGoSlide = async (startingRange, key) => {
     const slideRange = 100000;
     setActiveKey(key);
     console.log("Slide :", key);
-    const endParam = key * slideRange;
+    const endParam = key * slideRange + startingRange;
     const beginParam = endParam - slideRange + 1;
     setSlideBegin(beginParam);
     setSlideEnd(endParam);
@@ -174,16 +167,34 @@ const GetLengthData = () => {
             sx={{
               width: "100%",
               textAlign: "right",
-              alignItems: "center",
+              alignItems: "start",
               justifyContent: "space-between",
             }}
           >
-            <Typography
-              variant="h1"
-              sx={{ fontSize: "32px", fontWeight: "700" }}
+            <Box
+              component="div"
+              sx={{
+                width: "100%",
+                textAlign: "left",
+              }}
             >
-              Get Genes of Length
-            </Typography>
+              <Typography
+                variant="h1"
+                sx={{ fontSize: "32px", fontWeight: "700" }}
+              >
+                Search By Gene Position Range
+              </Typography>
+
+              <Typography
+                variant="body1"
+                sx={{ mt: 2, color: "#444" }}
+                gutterBottom
+              >
+                Define a positional range to retrieve genes located within
+                specific genome coordinates, ideal for targeted analysis in
+                specific genome regions.
+              </Typography>
+            </Box>
             <Button variant="contained" size="large" download>
               <FormatAlignCenterOutlinedIcon />
             </Button>
@@ -201,26 +212,26 @@ const GetLengthData = () => {
           >
             <TextField
               id="outlined-basic"
-              label="Min. Length"
+              label="Begin"
               variant="outlined"
               type="number"
-              sx={{ width: "150px" }}
-              value={minLength}
+              sx={{ width: "100px" }}
+              value={beginValue}
               onChange={(e) => {
-                setMinLength(e.target.value);
-                console.log(e.target.value);
+                setBeginValue(e.target.value);
+                //console.log(e.target.value);
               }}
             />
             <TextField
               id="outlined-basic"
-              label="Max. Length"
+              label="End"
               variant="outlined"
               type="number"
-              sx={{ width: "150px" }}
-              value={maxLength}
+              sx={{ width: "100px" }}
+              value={endValue}
               onChange={(e) => {
-                setMaxLength(e.target.value);
-                console.log(e.target.value);
+                setEndValue(e.target.value);
+                //console.log(e.target.value);
               }}
             />
             <FormControl sx={{ width: "100px" }}>
@@ -244,15 +255,15 @@ const GetLengthData = () => {
               variant="contained"
               size="large"
               startIcon={<SearchRoundedIcon />}
-              onClick={() => getLengthRangeData(minLength, maxLength)}
+              onClick={() => getGenePositionRange(beginValue, endValue)}
               sx={{ height: "56px" }}
             >
-              Get Genes
+              Get Data
             </Button>
           </Box>
         </Box>
         <hr />
-        {dataRec?.genes && (
+        {dataRec?.data && (
           <Box component="div" className="contentDiv" sx={{ background: "" }}>
             <Box
               component="div"
@@ -264,7 +275,7 @@ const GetLengthData = () => {
               }}
             >
               <Canvas
-                data={dataRec?.genes}
+                data={dataRec?.data}
                 rectHeight={rectHeight}
                 width={canvasWidth >= 900 ? canvasWidth - 2 : 900} // Numeric value
                 height={660} // Numeric value
@@ -302,17 +313,33 @@ const GetLengthData = () => {
                   aria-label="button group"
                 >
                   <Button size="small" variant="outlined">
-                    Total Slides : {Math.trunc(lastPoint / 100000 + 1)}
+                    Total Slides In Given Range :{" "}
+                    {Math.trunc(
+                      (dataRec?.range.adjustedEnd -
+                        dataRec?.range.adjustedBegin) /
+                        100000
+                    )}
                   </Button>
                   {Array.from(
-                    { length: Math.trunc(lastPoint / 100000 + 1) },
+                    {
+                      length: Math.trunc(
+                        (dataRec?.range.adjustedEnd -
+                          dataRec?.range.adjustedBegin) /
+                          100000
+                      ),
+                    },
                     (_, index) => (
                       <Button
                         variant={
                           activeKey === index + 1 ? "contained" : "outlined"
                         }
                         key={index}
-                        onClick={() => clickToGoSlide(index + 1)} // Set count as index + 1
+                        onClick={() =>
+                          clickToGoSlide(
+                            dataRec?.range.adjustedBegin,
+                            index + 1
+                          )
+                        } // Set count as index + 1
                       >
                         {index + 1}
                       </Button>
@@ -327,5 +354,4 @@ const GetLengthData = () => {
     </React.Fragment>
   );
 };
-
-export default GetLengthData;
+export default SearchByGenePositionRange;

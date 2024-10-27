@@ -14,35 +14,38 @@ import Canvas from "./canvas-component/Canvas";
 import FormatAlignCenterOutlinedIcon from "@mui/icons-material/FormatAlignCenterOutlined";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import {
-  serverGetRangeDataUrl,
+  serverGetLengthRangeDataUrl,
+  serverSearchByGenePositionRangeUrl,
   serverSlideUrl,
 } from "../services/mainAppApiCallConstants";
 
-const validateInputs = (begin, end) => {
-  const maxLimit = 3022314;
+const validateInputs = (min, max) => {
+  const maxLimit = 5000;
 
   // Ensure values are numbers
-  begin = Number(begin);
-  end = Number(end);
+  min = Number(min);
+  max = Number(max);
 
-  if (isNaN(begin) || isNaN(end)) {
+  if (isNaN(min) || isNaN(max)) {
     alert("Begin and End values must be valid numbers.");
     return false;
   }
 
-  if (begin < 0 || end < 0) {
-    alert("Begin and End values cannot be negative numbers.");
+  if (min < 0 || max < 0) {
+    alert("Min Length and Max Length values cannot be negative numbers.");
     return false;
   }
 
-  if (begin >= end) {
-    alert("Begin value cannot be greater than or equal to End value.");
-    return false;
-  }
-
-  if (begin > maxLimit || end > maxLimit) {
+  if (min >= max) {
     alert(
-      `Begin and End values cannot exceed the maximum limit of ${maxLimit}.`
+      "Min Length value cannot be greater than or equal to Max Length value."
+    );
+    return false;
+  }
+
+  if (min > maxLimit || max > maxLimit) {
+    alert(
+      `Min Length and Max Length values cannot exceed the maximum limit of ${maxLimit}.`
     );
     return false;
   }
@@ -52,31 +55,40 @@ const validateInputs = (begin, end) => {
 
 const rectHeight = 23; // Height for all rectangles
 
-const GetRangeData = () => {
+const SearchByGeneSize = () => {
   const ref = useRef(null);
-  const [beginValue, setBeginValue] = useState("");
-  const [endValue, setEndValue] = useState("");
+  const [minLength, setMinLength] = useState("");
+  const [maxLength, setMaxLength] = useState("");
   const [strandValue, setStrandValue] = useState("both");
   const [canvasWidth, setCanvasWidth] = useState(0);
   const [dataRec, setDataRec] = useState(null);
   const [activeKey, setActiveKey] = useState(1);
-  const [slideBegin, setSlideBegin] = useState(dataRec?.range.adjustedBegin);
+  const [slideBegin, setSlideBegin] = useState(1);
   const [slideEnd, setSlideEnd] = useState(100000);
+  const [lastPoint, setLastPoint] = useState();
 
-  const getRangeData = async (begin, end) => {
-    const valid = validateInputs(begin, end);
+  const getLengthRangeData = async (min, max) => {
+    const valid = validateInputs(min, max);
     if (valid) {
       try {
         //do the working
-        const url = serverGetRangeDataUrl + "?begin=" + begin + "&end=" + end;
+        const url =
+          serverGetLengthRangeDataUrl +
+          "?gene_min_length=" +
+          minLength +
+          "&gene_max_length=" +
+          maxLength;
         console.log(url);
         const response = await fetch(url);
         if (response.status === 200) {
           const data = await response.json();
           console.log(data);
           setDataRec(data);
-          setSlideBegin(data?.range.adjustedBegin + 1);
-          setSlideEnd(data?.range.adjustedBegin + 100000);
+          // setSlideBegin(data?.range.adjustedBegin + 1);
+          // setSlideEnd(data?.range.adjustedBegin + 100000);
+          setSlideBegin(1);
+          setSlideEnd(100000);
+          setLastPoint(data?.lastDocumentEndValue);
         }
       } catch (err) {
         console.log("error_message : ", err.message);
@@ -85,11 +97,11 @@ const GetRangeData = () => {
   };
 
   // fetch the slide data to pass in the canvas by passing the slide start and end point
-  const clickToGoSlide = async (startingRange, key) => {
+  const clickToGoSlide = async (key) => {
     const slideRange = 100000;
     setActiveKey(key);
     console.log("Slide :", key);
-    const endParam = key * slideRange + startingRange;
+    const endParam = key * slideRange;
     const beginParam = endParam - slideRange + 1;
     setSlideBegin(beginParam);
     setSlideEnd(endParam);
@@ -162,16 +174,33 @@ const GetRangeData = () => {
             sx={{
               width: "100%",
               textAlign: "right",
-              alignItems: "center",
+              alignItems: "start",
               justifyContent: "space-between",
             }}
           >
-            <Typography
-              variant="h1"
-              sx={{ fontSize: "32px", fontWeight: "700" }}
+            <Box
+              component="div"
+              sx={{
+                width: "100%",
+                textAlign: "left",
+              }}
             >
-              Get Genome in Range
-            </Typography>
+              <Typography
+                variant="h1"
+                sx={{ fontSize: "32px", fontWeight: "700" }}
+              >
+                Search By Gene Size
+              </Typography>
+
+              <Typography
+                variant="body1"
+                sx={{ mt: 2, color: "#444" }}
+                gutterBottom
+              >
+                Specify a size range to find genes that match the desired
+                length, enabling comparative studies and size-based research.
+              </Typography>
+            </Box>
             <Button variant="contained" size="large" download>
               <FormatAlignCenterOutlinedIcon />
             </Button>
@@ -189,26 +218,26 @@ const GetRangeData = () => {
           >
             <TextField
               id="outlined-basic"
-              label="Begin"
+              label="Min. Length"
               variant="outlined"
               type="number"
-              sx={{ width: "100px" }}
-              value={beginValue}
+              sx={{ width: "150px" }}
+              value={minLength}
               onChange={(e) => {
-                setBeginValue(e.target.value);
-                //console.log(e.target.value);
+                setMinLength(e.target.value);
+                console.log(e.target.value);
               }}
             />
             <TextField
               id="outlined-basic"
-              label="End"
+              label="Max. Length"
               variant="outlined"
               type="number"
-              sx={{ width: "100px" }}
-              value={endValue}
+              sx={{ width: "150px" }}
+              value={maxLength}
               onChange={(e) => {
-                setEndValue(e.target.value);
-                //console.log(e.target.value);
+                setMaxLength(e.target.value);
+                console.log(e.target.value);
               }}
             />
             <FormControl sx={{ width: "100px" }}>
@@ -232,15 +261,15 @@ const GetRangeData = () => {
               variant="contained"
               size="large"
               startIcon={<SearchRoundedIcon />}
-              onClick={() => getRangeData(beginValue, endValue)}
+              onClick={() => getLengthRangeData(minLength, maxLength)}
               sx={{ height: "56px" }}
             >
-              Get Data
+              Get Genes
             </Button>
           </Box>
         </Box>
         <hr />
-        {dataRec?.data && (
+        {dataRec?.genes && (
           <Box component="div" className="contentDiv" sx={{ background: "" }}>
             <Box
               component="div"
@@ -252,7 +281,7 @@ const GetRangeData = () => {
               }}
             >
               <Canvas
-                data={dataRec?.data}
+                data={dataRec?.genes}
                 rectHeight={rectHeight}
                 width={canvasWidth >= 900 ? canvasWidth - 2 : 900} // Numeric value
                 height={660} // Numeric value
@@ -290,33 +319,17 @@ const GetRangeData = () => {
                   aria-label="button group"
                 >
                   <Button size="small" variant="outlined">
-                    Total Slides In Given Range :{" "}
-                    {Math.trunc(
-                      (dataRec?.range.adjustedEnd -
-                        dataRec?.range.adjustedBegin) /
-                        100000
-                    )}
+                    Total Slides : {Math.trunc(lastPoint / 100000 + 1)}
                   </Button>
                   {Array.from(
-                    {
-                      length: Math.trunc(
-                        (dataRec?.range.adjustedEnd -
-                          dataRec?.range.adjustedBegin) /
-                          100000
-                      ),
-                    },
+                    { length: Math.trunc(lastPoint / 100000 + 1) },
                     (_, index) => (
                       <Button
                         variant={
                           activeKey === index + 1 ? "contained" : "outlined"
                         }
                         key={index}
-                        onClick={() =>
-                          clickToGoSlide(
-                            dataRec?.range.adjustedBegin,
-                            index + 1
-                          )
-                        } // Set count as index + 1
+                        onClick={() => clickToGoSlide(index + 1)} // Set count as index + 1
                       >
                         {index + 1}
                       </Button>
@@ -331,4 +344,5 @@ const GetRangeData = () => {
     </React.Fragment>
   );
 };
-export default GetRangeData;
+
+export default SearchByGeneSize;
