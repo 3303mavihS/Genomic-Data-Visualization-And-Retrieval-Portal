@@ -158,7 +158,13 @@ const SearchByGeneSequence = () => {
               sx={{ fontSize: "24px", fontWeight: "bold", mb: 2, mt: 2 }}
             >
               Result {dataFound ? "Found" : "Not Found"} !!!{" "}
-              {dataFound && <> Gene Name : {dataRec.Label}</>}
+              {dataFound && (
+                <>
+                  {" "}
+                  Gene Name :{" "}
+                  {dataRec?.Gene === "" ? dataRec?.Label : dataRec?.Gene}
+                </>
+              )}
             </Typography>
           )}
 

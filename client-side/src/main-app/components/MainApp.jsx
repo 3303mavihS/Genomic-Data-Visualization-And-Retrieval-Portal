@@ -138,7 +138,7 @@ const MainApp = () => {
               variant="h1"
               sx={{ fontSize: "32px", fontWeight: "700" }}
             >
-              Genome Name
+              Ralstonia Gene
             </Typography>
             <Button variant="contained" size="large" download>
               <FormatAlignCenterOutlinedIcon />

@@ -197,6 +197,57 @@ const useCanvas = (props) => {
     });
   };
 
+  const createRectangleWithArrowElement = (
+    ctx,
+    color,
+    strand,
+    xValue,
+    yValue,
+    rectWidth,
+    rectHeight,
+    label,
+    id
+  ) => {
+    // rectWidth=rectWidth-5;
+    const arrowWidth = 50*scaleFactor;
+  
+    // Set fill color for the rectangle and arrow
+    ctx.fillStyle = color;
+  
+    ctx.beginPath();
+    if (strand === "+") {
+      // Arrow points to the right, rectangle above the line
+      ctx.moveTo(xValue, yValue - rectHeight);
+      ctx.lineTo(xValue + rectWidth, yValue - rectHeight);
+      ctx.lineTo(xValue + rectWidth + arrowWidth, yValue - rectHeight + rectHeight / 2);
+      ctx.lineTo(xValue + rectWidth, yValue);
+      ctx.lineTo(xValue, yValue);
+    } else {
+      // Arrow points to the left, rectangle below the line
+      ctx.moveTo(xValue, yValue); // Start at the bottom left
+      ctx.lineTo(xValue - arrowWidth, yValue + rectHeight / 2); // Arrowhead to the left
+      ctx.lineTo(xValue, yValue + rectHeight); // Bottom right
+      ctx.lineTo(xValue + rectWidth, yValue + rectHeight); // Top right corner of rectangle
+      ctx.lineTo(xValue + rectWidth, yValue); // Top left corner of rectangle
+    }
+    ctx.closePath();
+  
+    // Fill and stroke the shape
+    ctx.fill();
+    ctx.stroke();
+  
+    // Store rectangle data for future use
+    rectangles.current.push({
+      x: xValue,
+      y: strand === "+" ? yValue - rectHeight : yValue,
+      width: rectWidth,
+      height: rectHeight,
+      label: label, // additional data (e.g., label) for reference
+      id: id, // add the id to the rectangles record to use it to create the list
+    });
+  };
+  
+
   /**
    * pass the parameters to create the font
    * @param {context} ctx
@@ -252,7 +303,7 @@ const useCanvas = (props) => {
   ) => {
     if (strand !== "both") {
       if (strand === elementStrand) {
-        createRectangleElement(
+        createRectangleWithArrowElement(
           ctx,
           color,
           elementStrand,
@@ -274,7 +325,7 @@ const useCanvas = (props) => {
         );
       }
     } else {
-      createRectangleElement(
+      createRectangleWithArrowElement(
         ctx,
         color,
         elementStrand,
@@ -317,11 +368,11 @@ const useCanvas = (props) => {
     );
 
     data?.forEach((element) => {
-      const text = element.Label.slice(-4);
+      const text = element.Gene===""?element.Label.slice(-4):element.Gene;
       const color = element.color;
-
+      element.End = element.End - 50;
       /** Update row and parameters if the element starts after the current range */
-      while (element.Begin > lineEndParameter && element.End <= pageEndPoint) {
+      if (element.Begin > lineEndParameter && element.End <= pageEndPoint) {
         row++;
         lineBeginParameter = lineEndParameter + 1;
         lineEndParameter = lineEndParameter + pageRange;

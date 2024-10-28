@@ -34,6 +34,27 @@ const DialogBox = ({ dialogData }) => {
     dispatch(setToggleDialogBox(false));
   };
 
+  //show only selected attributes
+  const selectedAttributes = [
+    "Begin",
+    "End",
+    "Strand",
+    "NucleotideSeq",
+    "Label",
+    "Type",
+    "Frame",
+    "Length",
+    "Evidence",
+    "Mutation",
+    "Gene",
+    "Synonyms",
+    "Product",
+    "Class",
+    "ProductType",
+    "Localization",
+    "Roles",
+  ];
+
   const handleBtnClick = async (slno) => {
     try {
       //code
@@ -87,7 +108,8 @@ const DialogBox = ({ dialogData }) => {
               sx={{ cursor: "pointer" }}
               onClick={() => handleBtnClick(parseInt(dialogData?.SlNo) - 1)}
             />
-            {dialogData?.Label}
+            {dialogData?.Gene === "" ? dialogData?.Label : dialogData?.Gene}
+            {/* {dialogData?.Gene} */}
             <ArrowForwardIosIcon
               sx={{ cursor: "pointer" }}
               onClick={() => handleBtnClick(parseInt(dialogData?.SlNo) + 1)}
@@ -107,41 +129,43 @@ const DialogBox = ({ dialogData }) => {
               </TableHead>
               <TableBody>
                 {/* Map the gene data object into table rows */}
-                {Object.entries(dialogData).map(([key, value]) => (
-                  <TableRow key={key}>
-                    <TableCell component="th" scope="row">
-                      {key}
-                    </TableCell>
-                    <TableCell
-                      align="right"
-                      sx={{
-                        width: "500px",
-                        wordWrap: "break-word",
-                        overflowX: "scroll",
-                        overflowY: "hidden",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {value !== "" ? (
-                        <>
-                          <ContentCopyIcon
-                            sx={{
-                              color: "#aeaeae",
-                              width: "20px",
-                              height: "20px",
-                              marginBottom: "-4px",
-                              cursor: "pointer",
-                            }}
-                            onClick={() => copyToClipboard(value)}
-                          />
-                          &nbsp;&nbsp;&nbsp;&nbsp;{value}
-                        </>
-                      ) : (
-                        "N/A"
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {Object.entries(dialogData)
+                  .filter(([key]) => selectedAttributes.includes(key))
+                  .map(([key, value]) => (
+                    <TableRow key={key}>
+                      <TableCell component="th" scope="row">
+                        {key}
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        sx={{
+                          width: "500px",
+                          wordWrap: "break-word",
+                          overflowX: "scroll",
+                          overflowY: "hidden",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {value !== "" ? (
+                          <>
+                            <ContentCopyIcon
+                              sx={{
+                                color: "#aeaeae",
+                                width: "20px",
+                                height: "20px",
+                                marginBottom: "-4px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => copyToClipboard(value)}
+                            />
+                            &nbsp;&nbsp;&nbsp;&nbsp;{value}
+                          </>
+                        ) : (
+                          "N/A"
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </TableContainer>

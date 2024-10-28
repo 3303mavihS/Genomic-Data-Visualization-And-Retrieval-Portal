@@ -328,7 +328,7 @@ export const exportGeneSequence = async (req,res)=>{
       parseInt(endIndex)
     );
 
-    const file_content = "modified_ralstoniagenedetails->"+sequencePart;
+    const file_content = ">modified_ralstoniagenedetails"+sequencePart;
 
     // Step 3: Create a temporary file with the extracted sequence
     const tempFilePath = path.join(__dirname, "temp_sequence.txt");

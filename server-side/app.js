@@ -14,6 +14,7 @@ import addNewGenomeDataRoutes from "./routes/add-new-genome-data-routes.js";
 import dashboardRoutes from "./routes/dashboard-routes.js";
 import { uploadDataFile } from "./controllers/add-new-genome-data-controllers.js";
 
+
 /**
  * On the launch of this file as starting entry point on server side
  * These are the basic and important configuration for the app
@@ -24,7 +25,8 @@ dotenv.config();
 //file path constants
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
+console.log(__filename);
+console.log(__dirname);
 //express app using other dependencies and libraries
 const app = express();
 app.use(express.json());
@@ -42,6 +44,10 @@ app.use(
   "/data/sample/download",
   express.static(path.join(__dirname, "data/sample/download"))
 );
+//server the dist folder to serve the folder in client side
+// app.use(express.static(path.join(__dirname,"../client-side/dist")));
+// app.get("*",(req,res)=>{res.sendFile(path.join(__dirname,"../client-side/dist","index.html"))});
+console.log(path.join(__dirname,"../client-side"));
 
 /**
  * storing the files
