@@ -34,3 +34,6 @@ export const serverGetTheGeneDataByNucSeq =
 
 //url to get the gene sequence from the database as the file
 export const serverExportGeneSequenceUrl = mainDomain + "/data/export-gene-sequence";
+
+//url to get the result based on the keyword sent to the as the query in request.
+export const serverGetResultFromDatabase = mainDomain + "/data/get-keyword-result";

@@ -111,11 +111,7 @@ const ExportGeneSequence = () => {
                 Export Gene Sequence
               </Typography>
 
-              <Typography
-                variant="body1"
-                sx={{ mt: 2, color: "#444" }}
-                gutterBottom
-              >
+              <Typography variant="body1" sx={{ mt: 2 }} gutterBottom>
                 Extract and export a gene sequence based on custom start and end
                 points, allowing flexible data access for external analysis or
                 reporting.

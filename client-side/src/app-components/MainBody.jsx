@@ -1,41 +1,38 @@
 import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useParams } from "react-router-dom";
 import MainApp from "../main-app/components/MainApp";
 import AddData from "../hidden-feature/components/AddData";
 import DialogBox from "../main-app/components/DialogBox";
 import SearchByGenePositionRange from "../main-app/components/SearchByGenePositionRange";
 import SearchByGeneSize from "../main-app/components/SearchByGeneSize";
-import SearchFromData from "../main-app/components/SearchFromData";
 import SearchByGeneSequence from "../main-app/components/SearchByGeneSequence";
 import { useSelector } from "react-redux";
 import ExportGeneSequence from "../main-app/components/ExportGeneSequence";
+import SearchInGeneData from "../main-app/components/SearchInGeneData";
 
 const MainBody = ({ component, sx }) => {
   const dialogData = useSelector((state) => state.globalData.geneData);
+
   // console.log(dialogData);
   return (
-    <Box component={component} className="uploadMainDiv" sx={sx}>
+    <Box component={component} sx={sx}>
       <Toolbar />
       <DialogBox dialogData={dialogData} />
       <Routes>
         <Route path="/" element={<MainApp />} />
-        <Route path="/:genomeName" element={<MainApp />} />
+        <Route path="search-in-gene-data" element={<SearchInGeneData />} />
+        <Route path="search-by-gene-size" element={<SearchByGeneSize />} />
         <Route
-          path="/:genomeName/search-from-data"
-          element={<SearchFromData />}
-        />
-        <Route
-          path="/:genome-name/search-by-gene-size"
-          element={<SearchByGeneSize />}
-        />
-        <Route
-          path="/:genomeName/search-by-nucleotide-seq"
+          path="search-by-nucleotide-seq"
           element={<SearchByGeneSequence />}
         />
-        <Route path="/:genome-name/search-in-position-range" element={<SearchByGenePositionRange />} />
-        <Route path="/:genome-name/export-gene-sequence" element={<ExportGeneSequence />} />
-        <Route path="/add-new-genome-data" element={<AddData />} />
+        <Route
+          path="search-in-position-range"
+          element={<SearchByGenePositionRange />}
+        />
+        <Route path="export-gene-sequence" element={<ExportGeneSequence />} />
+        <Route path="add-new-genome-data" element={<AddData />} />
       </Routes>
     </Box>
   );

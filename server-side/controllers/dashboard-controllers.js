@@ -348,3 +348,58 @@ export const exportGeneSequence = async (req,res)=>{
   }
 
 }
+
+//return the result of the keyword found in the database of gene data
+export const returnSearchInGeneData = async (req, res) => {
+  const { keyword } = req.query;
+  console.log(`Searching for keyword: ${keyword}`);
+  
+  try {
+    // Access the collection
+    const collection = database.collection("modified_ralstoniagenedetails");
+
+    // Perform a case-insensitive search on multiple fields using $or and $regex
+    const searchResult = await collection.find({
+      $or: [
+        { Type: { $regex: keyword, $options: "i" } },
+        { Gene: { $regex: keyword, $options: "i" } },
+        { Synonyms: { $regex: keyword, $options: "i" } },
+        { Product: { $regex: keyword, $options: "i" } },
+        { Class: { $regex: keyword, $options: "i" } },
+        { ProductType: { $regex: keyword, $options: "i" } },
+        { Localization: { $regex: keyword, $options: "i" } },
+        { Roles: { $regex: keyword, $options: "i" } },
+      ],
+    }).toArray();
+
+    // If no results found, return a 404
+    if (searchResult.length === 0) {
+      return res.status(404).json({ error_message: "No matching gene data found" });
+    }
+
+    // Map each document in searchResult to include the fields that contain the keyword
+    const resultWithMatchedFields = searchResult.map((doc) => {
+      // Initialize an object to hold matched fields
+      const matchedFields = {};
+
+      // Check each field and add it to matchedFields if it contains the keyword
+      ["Type", "Gene", "Synonyms", "Product", "Class", "ProductType", "Localization", "Roles"].forEach((field) => {
+        if (doc[field] && new RegExp(keyword, "i").test(doc[field])) {
+          matchedFields[field] = doc[field];
+        }
+      });
+
+      return {
+        geneData: doc,
+        matchedFields, // Add the matched fields as a new property in the response
+      };
+    });
+
+    // Return the search result with matched fields in the response
+    res.status(200).json({ data: resultWithMatchedFields });
+  } catch (err) {
+    console.log("Error:", err.message);
+    res.status(500).json({ error_message: err.message });
+  }
+};
+

@@ -192,11 +192,7 @@ const SearchByGeneSize = () => {
                 Search By Gene Size
               </Typography>
 
-              <Typography
-                variant="body1"
-                sx={{ mt: 2, color: "#444" }}
-                gutterBottom
-              >
+              <Typography variant="body1" sx={{ mt: 2 }} gutterBottom>
                 Specify a size range to find genes that match the desired
                 length, enabling comparative studies and size-based research.
               </Typography>

@@ -16,6 +16,7 @@
     "@mui/material": "^6.1.0",
     "@reactuses/core": "^5.0.21",
     "@reduxjs/toolkit": "^2.2.7",
+    "@splidejs/react-splide": "^0.7.12",
     "react": "^17.0.0 || ^18.0.0",
     "react-dom": "^17.0.0 || ^18.0.0",
     "react-redux": "^9.1.2",

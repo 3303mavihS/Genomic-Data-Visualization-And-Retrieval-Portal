@@ -3,7 +3,7 @@ import LeftSideDrawer from "./LeftSideDrawer";
 import MainBody from "./MainBody";
 import Box from "@mui/material/Box";
 import { useSelector } from "react-redux";
-import Test from "../Test";
+import HomePage from "./HomePage";
 
 const drawerWidth = 300;
 
@@ -28,7 +28,6 @@ const Dashboard = () => {
             }}
           />
         )}
-
         <MainBody component="main" sx={{ flexGrow: 1, p: 3 }} />
       </Box>
     </>

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Toolbar from "@mui/material/Toolbar";
@@ -6,17 +7,19 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import RadioButtonCheckedOutlinedIcon from "@mui/icons-material/RadioButtonCheckedOutlined";
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import AutofpsSelectIcon from '@mui/icons-material/AutofpsSelect';
-import DataObjectIcon from '@mui/icons-material/DataObject';
-import StraightenIcon from '@mui/icons-material/Straighten';
-import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import AutofpsSelectIcon from "@mui/icons-material/AutofpsSelect";
+import DataObjectIcon from "@mui/icons-material/DataObject";
+import StraightenIcon from "@mui/icons-material/Straighten";
+import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import UploadOutlinedIcon from "@mui/icons-material/UploadOutlined";
-import { NavLink } from "react-router-dom";
+
+import DataUsageOutlinedIcon from "@mui/icons-material/DataUsageOutlined";
+import { NavLink, useParams } from "react-router-dom";
 import { useState } from "react";
 
 const LeftSideDrawer = ({ variant, sx }) => {
+  const { genome } = useParams();
   const [selectedButtonKey, setSelectedButtonKey] = useState(1);
   const handleListButtonClick = (key) => {
     setSelectedButtonKey(key);
@@ -26,12 +29,8 @@ const LeftSideDrawer = ({ variant, sx }) => {
       <Toolbar />
       <Box sx={{ overflow: "auto", padding: "" }}>
         <List component="nav">
-
           <NavLink to="/">
-            <ListItemButton
-              selected={selectedButtonKey === 1}
-              onClick={() => handleListButtonClick(1)}
-            >
+            <ListItemButton>
               <ListItemIcon>
                 <HomeOutlinedIcon />
               </ListItemIcon>
@@ -39,7 +38,19 @@ const LeftSideDrawer = ({ variant, sx }) => {
             </ListItemButton>
           </NavLink>
 
-          <NavLink to="/:genome-name/search-from-data">
+          <NavLink to={`/dashboard/${genome}`}>
+            <ListItemButton
+              selected={selectedButtonKey === 1}
+              onClick={() => handleListButtonClick(1)}
+            >
+              <ListItemIcon>
+                <DataUsageOutlinedIcon />
+              </ListItemIcon>
+              <ListItemText primary="Visualized Data" />
+            </ListItemButton>
+          </NavLink>
+
+          <NavLink to={`/dashboard/${genome}/search-in-gene-data`}>
             <ListItemButton
               selected={selectedButtonKey === 2}
               onClick={() => handleListButtonClick(2)}
@@ -51,7 +62,7 @@ const LeftSideDrawer = ({ variant, sx }) => {
             </ListItemButton>
           </NavLink>
 
-          <NavLink to="/:genome-name/search-by-nucleotide-seq">
+          <NavLink to={`/dashboard/${genome}/search-by-nucleotide-seq`}>
             <ListItemButton
               selected={selectedButtonKey === 3}
               onClick={() => handleListButtonClick(3)}
@@ -63,7 +74,7 @@ const LeftSideDrawer = ({ variant, sx }) => {
             </ListItemButton>
           </NavLink>
 
-          <NavLink to="/:genome-name/search-in-position-range">
+          <NavLink to={`/dashboard/${genome}/search-in-position-range`}>
             <ListItemButton
               selected={selectedButtonKey === 4}
               onClick={() => handleListButtonClick(4)}
@@ -75,7 +86,7 @@ const LeftSideDrawer = ({ variant, sx }) => {
             </ListItemButton>
           </NavLink>
 
-          <NavLink to="/:genome-name/search-by-gene-size">
+          <NavLink to={`/dashboard/${genome}/search-by-gene-size`}>
             <ListItemButton
               selected={selectedButtonKey === 5}
               onClick={() => handleListButtonClick(5)}
@@ -87,18 +98,19 @@ const LeftSideDrawer = ({ variant, sx }) => {
             </ListItemButton>
           </NavLink>
 
-          <NavLink to="/:genome-name/export-gene-sequence">
-          <ListItemButton
-          selected={selectedButtonKey === 6}
-          onClick={()=> handleListButtonClick(6)}>
-            <ListItemIcon>
-              <ExitToAppIcon/>
-            </ListItemIcon>
-            <ListItemText primary="Export Gene Sequence"/>
+          <NavLink to={`/dashboard/${genome}/export-gene-sequence`}>
+            <ListItemButton
+              selected={selectedButtonKey === 6}
+              onClick={() => handleListButtonClick(6)}
+            >
+              <ListItemIcon>
+                <ExitToAppIcon />
+              </ListItemIcon>
+              <ListItemText primary="Export Gene Sequence" />
             </ListItemButton>
           </NavLink>
 
-          <NavLink to="/add-new-genome-data">
+          <NavLink to={`/dashboard/${genome}/add-new-genome-data`}>
             <ListItemButton
               selected={selectedButtonKey === 7}
               onClick={() => handleListButtonClick(7)}
@@ -109,7 +121,6 @@ const LeftSideDrawer = ({ variant, sx }) => {
               <ListItemText primary="Upload Genome Data" />
             </ListItemButton>
           </NavLink>
-
         </List>
       </Box>
     </Drawer>

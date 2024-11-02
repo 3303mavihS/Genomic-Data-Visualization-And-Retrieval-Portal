@@ -101,19 +101,8 @@ export const readFileContent = async (req, res) => {
   }
 };
 
-/**
- * function to save the file content to the database
- * read from the file store at the folder, whose name
- * received as params in request
- * @param {*} req
- * @param {*} res
- */
 // export const saveFileContent = async (req, res) => {
 //   try {
-//     /**
-//      * folder name extracted from request param and
-//      * look for the csv file that needs to be read
-//      */
 //     const { param_value, genome_name } = req.body;
 //     const folderPath = path.resolve(uploadedFileUrl, param_value);
 //     console.log(folderPath);
@@ -133,21 +122,44 @@ export const readFileContent = async (req, res) => {
 //         .json({ error_message: "No CSV file found in the folder" });
 //     }
 
-//     //exact path of the file to read
 //     const file_explicit_path = path.join(folderPath, csvFile);
-
 //     console.log(file_explicit_path);
 
-//     /**
-//      * Read the file and then save it to the server database
-//      * and return the success message with it.
-//      */
 //     const collection = database.collection(genome_name);
-//     console.log("client connection with database established.");
+//     console.log("Client connection with database established.");
+
 //     const results = [];
+//     const colors = [
+//       "#fc5101",
+//       "#a81149",
+//       "#0091cf",
+//       "#d0eb27",
+//       "#fabd00",
+//       "#fe2209",
+//       "#8700b0",
+//       "#0144fe",
+//       "#65b12e",
+//       "#fdfe2f",
+//       "#fb9a00",
+//     ]; // Define your set of colors here
+//     let lastPickedColor = null;
+
 //     fs.createReadStream(file_explicit_path)
 //       .pipe(csv())
 //       .on("data", (row) => {
+//         // Pick a random color that is not the same as the last one
+//         let newColor;
+//         do {
+//           newColor = colors[Math.floor(Math.random() * colors.length)];
+//         } while (newColor === lastPickedColor);
+
+//         // Update last picked color
+//         lastPickedColor = newColor;
+
+//         // Add the color attribute to the row
+//         row.color = newColor;
+
+//         // Push the modified row into the results array
 //         results.push(row);
 //       })
 //       .on("end", async () => {
@@ -170,6 +182,7 @@ export const saveFileContent = async (req, res) => {
   try {
     const { param_value, genome_name } = req.body;
     const folderPath = path.resolve(uploadedFileUrl, param_value);
+
     console.log(folderPath);
 
     // Check if the folder exists
@@ -194,42 +207,46 @@ export const saveFileContent = async (req, res) => {
     console.log("Client connection with database established.");
 
     const results = [];
-    const colors = [
-      "#fc5101",
-      "#a81149",
-      "#0091cf",
-      "#d0eb27",
-      "#fabd00",
-      "#fe2209",
-      "#8700b0",
-      "#0144fe",
-      "#65b12e",
-      "#fdfe2f",
-      "#fb9a00",
-    ]; // Define your set of colors here
-    let lastPickedColor = null;
+    const colorMap = {
+      "CDS": {
+        "+": "#0040ff",
+        "-": "#00bfff"
+      },
+      "fCDS": {
+        "+": "#ff0000",
+        "-": "#ffb3b3"
+      },
+      "misc_RNA": {
+        "+": "#00994d",
+        "-": "#33ff99"
+      },
+      "tRNA": {
+        "+": "#ffc61a",
+        "-": "#fff2cc"
+      },
+      "tmRNA": {
+        "+": "#6600ff",
+        "-": "#d1b3ff"
+      },
+      "rRNA": {
+        "+": "#ffffff",
+        "-": "#ffe6ff"
+      }
+    };
 
     fs.createReadStream(file_explicit_path)
       .pipe(csv())
       .on("data", (row) => {
-        // Pick a random color that is not the same as the last one
-        let newColor;
-        do {
-          newColor = colors[Math.floor(Math.random() * colors.length)];
-        } while (newColor === lastPickedColor);
+        const type = row.Type;
+        const strand = row.Strand;
 
-        // Update last picked color
-        lastPickedColor = newColor;
+        // Assign color based on type and strand
+        row.color = colorMap[type][strand];
 
-        // Add the color attribute to the row
-        row.color = newColor;
-
-        // Push the modified row into the results array
         results.push(row);
       })
       .on("end", async () => {
         try {
-          // Insert data into the collection
           await collection.insertMany(results);
           console.log("Data saved to database successfully.");
           res.status(200).json({ success_message: "Data Saved Successfully" });

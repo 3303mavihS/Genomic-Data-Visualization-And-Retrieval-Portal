@@ -185,11 +185,7 @@ const SearchByGenePositionRange = () => {
                 Search By Gene Position Range
               </Typography>
 
-              <Typography
-                variant="body1"
-                sx={{ mt: 2, color: "#444" }}
-                gutterBottom
-              >
+              <Typography variant="body1" sx={{ mt: 2 }} gutterBottom>
                 Define a positional range to retrieve genes located within
                 specific genome coordinates, ideal for targeted analysis in
                 specific genome regions.

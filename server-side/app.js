@@ -14,7 +14,6 @@ import addNewGenomeDataRoutes from "./routes/add-new-genome-data-routes.js";
 import dashboardRoutes from "./routes/dashboard-routes.js";
 import { uploadDataFile } from "./controllers/add-new-genome-data-controllers.js";
 
-
 /**
  * On the launch of this file as starting entry point on server side
  * These are the basic and important configuration for the app
@@ -103,6 +102,7 @@ const fileUpload = multer({
     }
   },
 });
+
 //action and response when upload url hit by frontend
 app.post(
   "/add-new-genome-data/upload-file",

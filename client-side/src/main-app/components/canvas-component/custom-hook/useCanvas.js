@@ -265,11 +265,11 @@ const useCanvas = (props) => {
     strand,
     xValue,
     yValue,
-    fontStyle
+    fontStyle, width
   ) => {
     ctx.fillStyle = color;
     ctx.font = fontStyle;
-    ctx.fillText(text, xValue + 5, strand === "+" ? yValue - 7 : yValue + 13);
+    ctx.fillText(text, xValue-10+width/2, strand === "+" ? yValue - 8 : yValue + 14.5);
   };
 
   /**
@@ -321,7 +321,7 @@ const useCanvas = (props) => {
           elementStrand,
           xValue,
           yValue,
-          fontStyle
+          fontStyle,rectWidth
         );
       }
     } else {
@@ -343,7 +343,7 @@ const useCanvas = (props) => {
         elementStrand,
         xValue,
         yValue,
-        fontStyle
+        fontStyle,rectWidth
       );
     }
   };
@@ -357,7 +357,7 @@ const useCanvas = (props) => {
   const drawElement = (ctx, data, rectHeight, strand) => {
     let lineBeginParameter = pageBeginPoint;
     let lineEndParameter = pageBeginPoint + pageRange - 1;
-    const fontStyle = "8px serif";
+    const fontStyle = "bold 10px Open Sans";
     const fontColor = "black";
     console.log(
       "Current Row : ",

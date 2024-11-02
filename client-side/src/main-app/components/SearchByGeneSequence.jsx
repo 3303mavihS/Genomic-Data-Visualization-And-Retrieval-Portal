@@ -97,11 +97,7 @@ const SearchByGeneSequence = () => {
                 Search By Gene Sequence
               </Typography>
 
-              <Typography
-                variant="body1"
-                sx={{ mt: 2, color: "#444" }}
-                gutterBottom
-              >
+              <Typography variant="body1" sx={{ mt: 2 }} gutterBottom>
                 Input a specific gene sequence to directly access detailed
                 information on matching genes, streamlining access to
                 sequence-specific data.

@@ -8,6 +8,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -21,6 +22,36 @@ import { useSelector, useDispatch } from "react-redux";
 import { setToggleDialogBox } from "../../state-management/feature/elementReducer";
 import { serverGetTheGeneDataByNextPrevBtn } from "../services/mainAppApiCallConstants";
 import { setGeneData } from "../../state-management/feature/dataReducer";
+
+function downloadTextFile(jsonData) {
+  // Convert JSON data to a string
+  const textData = JSON.stringify(jsonData, null, 2); // Indented JSON for readability
+
+  // Create a temporary link element
+  const element = document.createElement("a");
+  element.setAttribute(
+    "href",
+    "data:text/plain;charset=utf-8," + encodeURIComponent(textData)
+  );
+  element.setAttribute("download", "gene.txt");
+
+  // Append the link to the document body
+  document.body.appendChild(element);
+
+  // Trigger the download
+  element.click();
+
+  // Remove the temporary link element
+  document.body.removeChild(element);
+}
+
+// Example usage:
+const tableData = [
+  ["Name", "Age", "City"],
+  ["Alice", 25, "New York"],
+  ["Bob", 30, "Los Angeles"],
+  ["Charlie", 28, "Chicago"],
+];
 
 const DialogBox = ({ dialogData }) => {
   const openDialogBox = useSelector((state) => state.element.toggleDialogBox);
@@ -171,6 +202,16 @@ const DialogBox = ({ dialogData }) => {
           </TableContainer>
         </DialogContent>
         <DialogActions>
+          <Button
+            variant="outlined"
+            size="medium"
+            startIcon={<FileDownloadIcon />}
+            onClick={() => {
+              downloadTextFile(dialogData);
+            }}
+          >
+            Download Gene Data
+          </Button>
           <Button
             variant="contained"
             size="medium"

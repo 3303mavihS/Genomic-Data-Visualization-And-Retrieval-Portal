@@ -8,6 +8,7 @@ import {
   returnSearchByGenePositionRange,
   returnLastPointOfData,
   returnSlideData,
+  returnSearchInGeneData,
   exportGeneSequence,
 } from "../controllers/dashboard-controllers.js";
 
@@ -26,6 +27,7 @@ router.get("/get-gene-data-by-length", returnGeneByLength);
 router.get("/get-gene-data", returnGeneData);
 router.get("/export-gene-sequence",exportGeneSequence);
 router.get("/get-gene-data/by-slno", returnGeneDataByNextPrevBtn);
+router.get("/get-keyword-result",returnSearchInGeneData);
 router.post("/get-gene-data-by-seq", returnGeneBySeq);
 
 export default router;
