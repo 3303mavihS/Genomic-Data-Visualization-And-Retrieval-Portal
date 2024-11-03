@@ -310,6 +310,8 @@ export const returnGeneByLength = async (req, res) => {
 export const exportGeneSequence = async (req,res)=>{
   const { beginIndex, endIndex } = req.query;
   console.log(beginIndex,endIndex);
+  const begin = parseInt(beginIndex);
+  const end = parseInt(endIndex)+1;
 
   // Check if indices are provided and are valid numbers
   if (!beginIndex || !endIndex || isNaN(beginIndex) || isNaN(endIndex)) {
@@ -324,11 +326,24 @@ export const exportGeneSequence = async (req,res)=>{
 
     // Step 2: Extract the substring based on provided indices
     const sequencePart = fullSequence.substring(
-      parseInt(beginIndex),
-      parseInt(endIndex)
+      begin,
+      end
     );
 
-    const file_content = ">modified_ralstoniagenedetails"+sequencePart;
+    
+
+    // Break the sequence into 16-character lines
+const lines = [];
+let i = 0;
+while (i < sequencePart.length) {
+  lines.push(sequencePart.substring(i, i + 50));
+  i += 50;
+}
+
+// Join the lines with newline characters
+const formattedSequence = lines.join('\n');
+
+    const file_content = ">ralstonia:"+beginIndex+":"+endIndex+":- len="+(end-begin)+"\n"+formattedSequence;
 
     // Step 3: Create a temporary file with the extracted sequence
     const tempFilePath = path.join(__dirname, "temp_sequence.txt");

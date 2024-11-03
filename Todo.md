@@ -20,7 +20,7 @@ Structure :
 --- Interface
 /// A vertical minimap at right most side of the screen and it will be hidden in mobile
 
-### \*\*\* Search in Label,Gene,Synonyms,Product,Roles
+### \*\*\* Search in Label,Gene,Synonyms,Product,Roles ---------------- DONE
 
 --- It will search for the text provided and the in the provided category or given labels
 --- Interface
@@ -44,7 +44,7 @@ Structure :
 --- Interface
 /// A start and end input will be there to get the input values for the range and show the result along with the minimap
 
-### \*\*\* Show Gene within (length,Strand).
+### \*\*\* Show Gene within (length,Strand). ---------------- DONE
 
 --- It will show the genomes within a given length and the data will be displayed as usual with start and end information too. it will work same as range feature.
 --- Interface

@@ -49,6 +49,7 @@ const ExportGeneSequence = () => {
   const ref = useRef(null);
   const [beginIndexValue, setBeginIndexValue] = useState("");
   const [endIndexValue, setEndIndexValue] = useState("");
+  const [extractedSeq, setExtractedSeq] = useState("");
 
   const getGeneSequenceToExport = async (beginIndexValue, endIndexValue) => {
     console.log(beginIndexValue, endIndexValue);
@@ -64,15 +65,23 @@ const ExportGeneSequence = () => {
           endIndexValue;
         console.log(url);
         const response = await fetch(url);
+        console.log(response);
         if (response.ok) {
-          const blob = await response.blob();
-          const url = window.URL.createObjectURL(blob);
-          const link = document.createElement("a");
-          link.href = url;
-          link.download = "extracted_sequence.txt";
-          document.body.appendChild(link);
-          link.click();
-          link.remove();
+          const textContent = await response.text(); // Read the text content
+          setExtractedSeq(textContent); // Set the extracted sequence for display
+          console.log("Extracted sequence:", textContent);
+
+          // Optional: Prompt user to download before creating the link
+          if (window.confirm("Sequence retrieved. Download?")) {
+            const blob = new Blob([textContent], { type: "text/plain" }); // Create a blob
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "extracted_sequence.txt";
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+          }
         } else {
           console.log("Failed to download sequence:", response.statusText);
         }
@@ -170,6 +179,9 @@ const ExportGeneSequence = () => {
           </Box>
         </Box>
         <hr />
+        <Typography variant="body1" sx={{ mt: 2 }} gutterBottom>
+          <pre>{extractedSeq.toUpperCase()}</pre>
+        </Typography>
       </Box>
     </React.Fragment>
   );
