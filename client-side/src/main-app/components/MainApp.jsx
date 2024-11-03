@@ -26,30 +26,13 @@ const MainApp = () => {
   const [activeKey, setActiveKey] = useState(1);
   const [slideBegin, setSlideBegin] = useState(1);
   const [slideEnd, setSlideEnd] = useState(100000);
-
   const getlastEndPoint = async () => {
     try {
       const response = await fetch(serverGetLastEndPoint);
       if (response.ok) {
         const data = await response.json();
-        console.log(data.EndPoint);
+        //console.log(data.EndPoint);
         setLastPoint(data?.EndPoint);
-      }
-    } catch (err) {
-      console.log("error_message : ", err.message);
-    }
-  };
-
-  /**
-   * Get the initial data from the database to show on load of the page
-   */
-  const getGenomeData = async () => {
-    try {
-      const response = await fetch(serverGetGenomeDataTest);
-      if (response.status === 200) {
-        const data = await response.json();
-        console.log(data);
-        setDataRec(data);
       }
     } catch (err) {
       console.log("error_message : ", err.message);
@@ -58,15 +41,16 @@ const MainApp = () => {
 
   // fetch the slide data to pass in the canvas by passing the slide start and end point
   const clickToGoSlide = async (key) => {
+    getlastEndPoint();
     const slideRange = 100000;
     setActiveKey(key);
-    console.log("Slide :", key);
+    //console.log("Slide :", key);
 
     const endParam = key * slideRange;
     const beginParam = endParam - slideRange + 1;
     setSlideBegin(beginParam);
     setSlideEnd(endParam);
-    console.log("Start : ", beginParam, " End : ", endParam);
+    //console.log("Start : ", beginParam, " End : ", endParam);
 
     /**
      * Creating url to fetch the data for the current slide
@@ -80,13 +64,13 @@ const MainApp = () => {
       beginParam +
       "&end=" +
       endParam;
-    console.log("Url : ", url);
+    //console.log("Url : ", url);
 
     try {
       const response = await fetch(url);
       if (response.status === 200) {
         const data = await response.json();
-        console.log(data);
+        //console.log(data);
         setDataRec(data);
       }
     } catch (err) {
@@ -95,10 +79,9 @@ const MainApp = () => {
   };
 
   useEffect(() => {
-    getGenomeData();
-    getlastEndPoint();
-    console.log(lastPoint);
-    // Initialize ResizeObserver
+    clickToGoSlide(activeKey);
+    //console.log(lastPoint);
+    // // Initialize ResizeObserver
     const resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
         // Get the width of the observed element (the Box)
@@ -118,7 +101,8 @@ const MainApp = () => {
         resizeObserver.unobserve(ref.current);
       }
     };
-  }, []);
+  }, [canvasWidth]);
+
   return (
     <React.Fragment>
       <CssBaseline />
@@ -159,9 +143,11 @@ const MainApp = () => {
             <Canvas
               data={dataRec?.data}
               rectHeight={rectHeight}
-              width={canvasWidth >= 1000 ? canvasWidth - 2 : 1000} // Numeric value
+              width={canvasWidth >= 1000 ? canvasWidth : 1000} // Numeric value
               height={660} // Numeric value
-              style={{ border: "1px solid black", background: "#fff" }}
+              style={{
+                background: "#fff",
+              }}
               slideBegin={slideBegin}
               slideEnd={slideEnd}
               strand={"both"}

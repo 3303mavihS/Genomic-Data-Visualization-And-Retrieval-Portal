@@ -46,7 +46,6 @@ const App = () => {
         <Routes>
           <Route exact path="/" element={<HomePage />} />
           <Route path="/dashboard/:genome" element={<Dashboard />}>
-            {/* <Route path={`/${genome}`} element={<MainApp />} /> */}
             <Route path="search-in-gene-data" element={<SearchInGeneData />} />
             <Route path="search-by-gene-size" element={<SearchByGeneSize />} />
             <Route

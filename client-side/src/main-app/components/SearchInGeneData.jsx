@@ -180,8 +180,13 @@ const SearchInGeneData = () => {
                 >
                   <Box>
                     <Typography>
-                      Ralstonia Chromosome ../ ../ .. <strong>{keyword}</strong>{" "}
-                      ../ -- <strong>Match Found</strong>
+                      Ralstonia Chromosome ../ ../ .. {keyword} ../
+                      <strong>
+                        {result.geneData.Gene !== ""
+                          ? result.geneData.Gene
+                          : result.geneData.Label}{" "}
+                        -- Match Found
+                      </strong>
                     </Typography>
 
                     {/* Matching Attributes Table Starts Here */}

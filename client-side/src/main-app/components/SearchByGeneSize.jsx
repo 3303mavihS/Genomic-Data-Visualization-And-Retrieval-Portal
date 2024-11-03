@@ -161,7 +161,7 @@ const SearchByGeneSize = () => {
         resizeObserver.unobserve(ref.current);
       }
     };
-  });
+  }, []);
 
   return (
     <React.Fragment>

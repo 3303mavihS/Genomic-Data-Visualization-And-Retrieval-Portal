@@ -50,7 +50,7 @@ function randomColor() {
   // Return a random color from the set
 
   const randomIndex = Math.floor(Math.random() * colorSet.length);
-  //console.log(colorSet[randomIndex]);
+  ////console.log(colorSet[randomIndex]);
   return colorSet[randomIndex];
 }
 
@@ -64,7 +64,7 @@ const useCanvas = (props) => {
   pageRange = pageRange / 10;
 
   const scaleFactor = (width - 60) / pageRange;
-  console.log(scaleFactor);
+  //console.log(scaleFactor);
   const gap = height / 11;
   let yValue = gap; //vertical values
   let xValue = 0;
@@ -359,46 +359,35 @@ const useCanvas = (props) => {
     let lineEndParameter = pageBeginPoint + pageRange - 1;
     const fontStyle = "bold 10px Open Sans";
     const fontColor = "black";
-    console.log(
-      "Current Row : ",
-      row,
-      lineBeginParameter,
-      lineEndParameter,
-      yValue
-    );
+    //console.log("Starting Row :", row," Line Begin : ", lineBeginParameter," Line End : ", lineEndParameter,"New Y-coordinate : ", yValue);
+    
 
     data?.forEach((element) => {
       const text = element.Gene===""?element.Label.slice(-4):element.Gene;
       const color = element.color;
-      element.End = element.End - 50;
+      const elementEnd = element.End - 50;
       /** Update row and parameters if the element starts after the current range */
-      if (element.Begin > lineEndParameter && element.End <= pageEndPoint) {
+      if (element.Begin > lineEndParameter && elementEnd <= pageEndPoint) {
         row++;
         lineBeginParameter = lineEndParameter + 1;
         lineEndParameter = lineEndParameter + pageRange;
         yValue = gap * row;
-        console.log(
-          "Current Row Adjusted : ",
-          row,
-          lineBeginParameter,
-          lineEndParameter,
-          yValue
-        );
+        //console.log("New Row :", row," Line Begin : ", lineBeginParameter," Line End : ", lineEndParameter,"New Y-coordinate : ", yValue);
       }
 
       /**Create the rectangle from the previous rectangle */
       if (
         element.Begin <= lineBeginParameter &&
-        element.End >= lineBeginParameter
+        elementEnd >= lineBeginParameter
       ) {
-        console.log(
-          "Previous Remaining Box : ",
-          element.Begin,
-          element.End,
-          element.Label
-        );
+        // console.log(
+        //   "Previous Remaining Box : ",
+        //   element.Begin,
+        //   elementEnd,
+        //   element.Label
+        // );
         let Begin = lineBeginParameter;
-        let End = element.End;
+        let End = elementEnd;
         let rectWidth = End - Begin;
         rectWidth *= scaleFactor;
         xValue = 30;
@@ -422,17 +411,17 @@ const useCanvas = (props) => {
       if (
         element.Begin >= lineBeginParameter &&
         element.Begin <= lineEndParameter &&
-        element.End <= lineEndParameter
+        elementEnd <= lineEndParameter
       ) {
-        console.log(
-          "Normal Box : ",
-          lineBeginParameter,
-          element.Begin,
-          element.End,
-          lineEndParameter,
-          element.Label
-        );
-        let rectWidth = element.End - element.Begin;
+        // console.log(
+        //   "Normal Box Line-Begin : ",
+        //   lineBeginParameter," Line-End : ",
+        //   lineEndParameter," Rect-Begin : ",
+        //   element.Begin," Rect-End : ",
+        //   elementEnd," Rect-Label : ",
+        //   element.Label
+        // );
+        let rectWidth = elementEnd - element.Begin;
         rectWidth *= scaleFactor;
         let Begin = element.Begin % pageRange;
         xValue = Begin * scaleFactor;
@@ -458,14 +447,15 @@ const useCanvas = (props) => {
       if (
         element.Begin >= lineBeginParameter &&
         element.Begin <= lineEndParameter &&
-        element.End >= lineEndParameter
+        elementEnd >= lineEndParameter
       ) {
-        console.log(
-          "Box on current line : ",
-          element.Begin,
-          element.End,
-          element.Label
-        );
+        //console.log("Box on two lines starts here");
+        // console.log(
+        //   "Box on current line Begin : ",
+        //     element.Begin," End : ",
+        //     elementEnd,"Label : ",
+        //     element.Label
+        // );
         //create the rectangle on current line
         let rectWidth = lineEndParameter - element.Begin;
         rectWidth *= scaleFactor;
@@ -489,21 +479,22 @@ const useCanvas = (props) => {
         );
 
         //change the row
-        if (element.End <= pageEndPoint) {
+        if (elementEnd <= pageEndPoint) {
           row++;
           lineBeginParameter = lineEndParameter + 1;
           lineEndParameter = lineEndParameter + pageRange;
           yValue = gap * row;
-          console.log(row, lineBeginParameter, lineEndParameter, yValue);
-          console.log(
-            "Remaining Box : ",
-            element.Begin,
-            element.End,
-            element.Label
-          );
+          //console.log("New Row :", row," Line Begin : ", lineBeginParameter," Line End : ", lineEndParameter,"New Y-coordinate : ", yValue);
+          // console.log(
+          //   "Remaining Box Begin : ",
+          //   element.Begin," End : ",
+          //   elementEnd,"Label : ",
+          //   element.Label
+          // );
+          //console.log("Box on two lines ends here");
           //and create the remaining part here
           let remBegin = 30;
-          let remEnd = element.End - lineBeginParameter - 1;
+          let remEnd = elementEnd - lineBeginParameter - 1;
           let remWidth = remEnd - remBegin;
           remWidth = remWidth * scaleFactor;
           xValue = remBegin;
@@ -530,7 +521,7 @@ const useCanvas = (props) => {
   const ref = useRef(null);
 
   useEffect(() => {
-    console.log(data);
+    //console.log(data);
     rectangles.current = []; // Reset the rectangles array
     const canvas = ref.current;
     if (!canvas) return; // If canvas is not yet available, exit early
@@ -546,7 +537,7 @@ const useCanvas = (props) => {
     drawHorizontalLine(context, width, height, pageBeginPoint, pageEndPoint);
     drawElement(context, data, rectHeight, strand);
 
-    // console.log(rectangles);
+    // //console.log(rectangles);
 
     const handleRectClick = async (e) => {
       const rect = canvas.getBoundingClientRect();
@@ -560,8 +551,8 @@ const useCanvas = (props) => {
           mouseY >= rectangle.y &&
           mouseY <= rectangle.y + rectangle.height
         ) {
-          // console.log(`Rectangle with label ${rectangle.label} clicked!`);
-          // console.log(`Rectangle id is : ${rectangle.id}`);
+          // //console.log(`Rectangle with label ${rectangle.label} clicked!`);
+          // //console.log(`Rectangle id is : ${rectangle.id}`);
           // Perform any action on click
           try {
             //code to fetch the data for the particular rectangle
@@ -570,7 +561,7 @@ const useCanvas = (props) => {
             const response = await fetch(url);
             if (response.status === 200) {
               const data = await response.json();
-              // console.log(data);
+              //console.log(data);
               dispatch(setToggleDialogBox(true));
               dispatch(setGeneData(data));
             }
@@ -611,7 +602,7 @@ const useCanvas = (props) => {
       canvas.removeEventListener("click", handleRectClick);
       canvas.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [data, rectHeight, height, width, slideBegin, slideEnd, strand]); // Make sure to add all depEndencies
+  }, [data, rectHeight, width, height, slideBegin, slideEnd, strand]); // Make sure to add all depEndencies
 
   return ref;
 };

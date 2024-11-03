@@ -8,33 +8,6 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-//this will return the data to show on the first load of data
-export const returnFirstWindowData = async (req, res) => {
-  try {
-    //modified_ralstoniagenedetails
-    const collection = database.collection("modified_ralstoniagenedetails");
-
-    const genomeData = await collection
-      .find({
-        $expr: {
-          $and: [
-            { $gte: [{ $toInt: "$Begin" }, 1] },
-            { $lte: [{ $toInt: "$Begin" }, 100000] },
-          ],
-        },
-      })
-      .toArray();
-
-    // Return the fetched data to the client
-    res.status(200).json({
-      data: genomeData,
-    });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).json({ error_message: err.message });
-  }
-};
-
 //this will return the last Row's End value so that it can be used on front end
 export const returnLastPointOfData = async (req, res) => {
   try {

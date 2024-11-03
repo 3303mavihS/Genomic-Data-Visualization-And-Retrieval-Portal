@@ -14,19 +14,22 @@ import Canvas from "./canvas-component/Canvas";
 import FormatAlignCenterOutlinedIcon from "@mui/icons-material/FormatAlignCenterOutlined";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import {
+  serverGetLastEndPoint,
   serverSearchByGenePositionRangeUrl,
   serverSlideUrl,
 } from "../services/mainAppApiCallConstants";
 
-const validateInputs = (begin, end) => {
-  const maxLimit = 3022314;
-
+const validateInputs = (begin, end, lastPoint) => {
   // Ensure values are numbers
   begin = Number(begin);
   end = Number(end);
+  const maxLimit = Number(lastPoint);
 
   if (isNaN(begin) || isNaN(end)) {
     alert("Begin and End values must be valid numbers.");
+    return false;
+  }
+  if (begin === 0 || end === 0) {
     return false;
   }
 
@@ -58,13 +61,28 @@ const SearchByGenePositionRange = () => {
   const [endValue, setEndValue] = useState("");
   const [strandValue, setStrandValue] = useState("both");
   const [canvasWidth, setCanvasWidth] = useState(0);
+  const [lastPoint, setLastPoint] = useState(0);
   const [dataRec, setDataRec] = useState(null);
   const [activeKey, setActiveKey] = useState(1);
   const [slideBegin, setSlideBegin] = useState(dataRec?.range.adjustedBegin);
   const [slideEnd, setSlideEnd] = useState(100000);
 
+  const getlastEndPoint = async () => {
+    try {
+      const response = await fetch(serverGetLastEndPoint);
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data.EndPoint);
+        setLastPoint(data?.EndPoint);
+      }
+    } catch (err) {
+      console.log("error_message : ", err.message);
+    }
+  };
+
   const getGenePositionRange = async (begin, end) => {
-    const valid = validateInputs(begin, end);
+    const last = getlastEndPoint();
+    const valid = validateInputs(begin, end, last);
     if (valid) {
       try {
         //do the working
@@ -99,7 +117,7 @@ const SearchByGenePositionRange = () => {
     setSlideBegin(beginParam);
     setSlideEnd(endParam);
     console.log("Begin : ", beginParam, " End : ", endParam);
-
+    // getGenePositionRange(beginValue, endValue);
     /**
      * Creating url to fetch the data for the current slide
      * passign parameters and slide no.
@@ -134,7 +152,8 @@ const SearchByGenePositionRange = () => {
   };
 
   useEffect(() => {
-    // Initialize ResizeObserver
+    console.log(lastPoint);
+    // // Initialize ResizeObserver
     const resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
         // Get the width of the observed element (the Box)
@@ -154,7 +173,7 @@ const SearchByGenePositionRange = () => {
         resizeObserver.unobserve(ref.current);
       }
     };
-  });
+  }, [canvasWidth]);
 
   return (
     <React.Fragment>
@@ -273,10 +292,9 @@ const SearchByGenePositionRange = () => {
               <Canvas
                 data={dataRec?.data}
                 rectHeight={rectHeight}
-                width={canvasWidth >= 900 ? canvasWidth - 2 : 900} // Numeric value
+                width={canvasWidth >= 1000 ? canvasWidth : 1000} // Numeric value
                 height={660} // Numeric value
                 style={{
-                  border: "1px solid black",
                   background: "#fff",
                 }}
                 slideBegin={slideBegin}

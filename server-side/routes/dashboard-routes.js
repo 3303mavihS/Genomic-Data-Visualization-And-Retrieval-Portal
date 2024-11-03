@@ -1,6 +1,5 @@
 import express from "express";
 import {
-  returnFirstWindowData,
   returnGeneByLength,
   returnGeneBySeq,
   returnGeneData,
@@ -19,7 +18,7 @@ const router = express.Router();
  * all the parameter or data will be receieved in request and will be consumed
  * there only and nothing would be able to get inside the database from the dashboard side
  */
-router.get("/genome-data", returnFirstWindowData);
+
 router.get("/calculate-slides", returnLastPointOfData);
 router.get(`/slide/:slideNo/params`, returnSlideData);
 router.get("/get-range-data", returnSearchByGenePositionRange);
