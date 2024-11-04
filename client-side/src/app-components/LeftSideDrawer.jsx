@@ -14,7 +14,6 @@ import StraightenIcon from "@mui/icons-material/Straighten";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import UploadOutlinedIcon from "@mui/icons-material/UploadOutlined";
 import DonutLargeIcon from "@mui/icons-material/DonutLarge";
-import DataUsageOutlinedIcon from "@mui/icons-material/DataUsageOutlined";
 import { NavLink, useParams } from "react-router-dom";
 import { useState } from "react";
 

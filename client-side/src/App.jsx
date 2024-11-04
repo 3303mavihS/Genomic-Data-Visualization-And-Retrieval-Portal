@@ -2,20 +2,21 @@ import { useMemo } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import { createTheme } from "@mui/material/styles";
-import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Dashboard from "./app-components/Dashboard.jsx";
-import HomePage from "./app-components/HomePage.jsx";
-import MainApp from "./main-app/components/MainApp.jsx";
+import Home from "./app-components/Home.jsx";
 import SearchInGeneData from "./main-app/components/SearchInGeneData.jsx";
 import SearchByGeneSize from "./main-app/components/SearchByGeneSize.jsx";
 import SearchByGeneSequence from "./main-app/components/SearchByGeneSequence.jsx";
 import SearchByGenePositionRange from "./main-app/components/SearchByGenePositionRange.jsx";
 import ExportGeneSequence from "./main-app/components/ExportGeneSequence.jsx";
 import AddData from "./hidden-feature/components/AddData.jsx";
+import Intro from "./app-components/Intro.jsx";
+import Laboratories from "./app-components/Laboratories.jsx";
 
 const App = () => {
   const currentTheme = useSelector((state) => state.element.toggleTheme);
-  const { genome } = useParams();
+
   const theme = useMemo(
     () =>
       createTheme({
@@ -44,7 +45,10 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <Routes>
-          <Route exact path="/" element={<HomePage />} />
+          <Route path="/" element={<Home />}>
+            <Route path="intro" element={<Intro />} />
+            <Route path="associate-laboratories" element={<Laboratories />} />
+          </Route>
           <Route path="/dashboard/:genome" element={<Dashboard />}>
             <Route path="search-in-gene-data" element={<SearchInGeneData />} />
             <Route path="search-by-gene-size" element={<SearchByGeneSize />} />
