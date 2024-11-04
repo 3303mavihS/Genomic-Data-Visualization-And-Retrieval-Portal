@@ -13,11 +13,7 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import Canvas from "./canvas-component/Canvas";
 import FormatAlignCenterOutlinedIcon from "@mui/icons-material/FormatAlignCenterOutlined";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
-import {
-  serverGetLengthRangeDataUrl,
-  serverSearchByGenePositionRangeUrl,
-  serverSlideUrl,
-} from "../services/mainAppApiCallConstants";
+import { serverGetLengthRangeDataUrl } from "../services/mainAppApiCallConstants";
 
 const validateInputs = (min, max) => {
   const maxLimit = 5000;

@@ -1,4 +1,3 @@
-import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";

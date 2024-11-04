@@ -11,7 +11,6 @@ import Canvas from "./canvas-component/Canvas";
 import FormatAlignCenterOutlinedIcon from "@mui/icons-material/FormatAlignCenterOutlined";
 
 import {
-  serverGetGenomeDataTest,
   serverGetLastEndPoint,
   serverSlideUrl,
 } from "../services/mainAppApiCallConstants";

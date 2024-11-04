@@ -16,7 +16,6 @@ import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import {
   serverGetLastEndPoint,
   serverSearchByGenePositionRangeUrl,
-  serverSlideUrl,
 } from "../services/mainAppApiCallConstants";
 
 const validateInputs = (begin, end, lastPoint) => {

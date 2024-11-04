@@ -1,12 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import { Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import FormatAlignCenterOutlinedIcon from "@mui/icons-material/FormatAlignCenterOutlined";
 import { serverExportGeneSequenceUrl } from "../services/mainAppApiCallConstants";
