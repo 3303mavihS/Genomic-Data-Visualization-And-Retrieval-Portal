@@ -209,9 +209,6 @@ const SearchByGenePositionRange = () => {
                 specific genome regions.
               </Typography>
             </Box>
-            <Button variant="contained" size="large" download>
-              <FormatAlignCenterOutlinedIcon />
-            </Button>
           </Box>
         </Stack>
         <Box

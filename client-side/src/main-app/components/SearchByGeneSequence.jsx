@@ -103,9 +103,6 @@ const SearchByGeneSequence = () => {
                 sequence-specific data.
               </Typography>
             </Box>
-            <Button variant="contained" size="large" download>
-              <FormatAlignCenterOutlinedIcon />
-            </Button>
           </Box>
         </Stack>
         <Box

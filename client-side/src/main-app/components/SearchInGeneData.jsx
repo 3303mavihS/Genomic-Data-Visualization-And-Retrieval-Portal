@@ -107,9 +107,6 @@ const SearchInGeneData = () => {
                 data, making gene discovery easy and intuitive.
               </Typography>
             </Box>
-            <Button variant="contained" size="large" download>
-              <FormatAlignCenterOutlinedIcon />
-            </Button>
           </Box>
         </Stack>
         <Box

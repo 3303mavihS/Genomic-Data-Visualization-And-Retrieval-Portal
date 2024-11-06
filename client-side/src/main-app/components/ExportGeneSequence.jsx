@@ -124,9 +124,6 @@ const ExportGeneSequence = () => {
                 reporting.
               </Typography>
             </Box>
-            <Button variant="contained" size="large" download>
-              <FormatAlignCenterOutlinedIcon />
-            </Button>
           </Box>
         </Stack>
         <Box

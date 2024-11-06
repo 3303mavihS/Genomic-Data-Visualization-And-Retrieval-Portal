@@ -193,9 +193,6 @@ const SearchByGeneSize = () => {
                 length, enabling comparative studies and size-based research.
               </Typography>
             </Box>
-            <Button variant="contained" size="large" download>
-              <FormatAlignCenterOutlinedIcon />
-            </Button>
           </Box>
         </Stack>
         <Box

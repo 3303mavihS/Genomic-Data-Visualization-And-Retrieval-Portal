@@ -53,6 +53,7 @@ const AddData = () => {
             width: "100%",
             textAlign: "right",
             justifyContent: "end",
+            alignContent: "start",
           }}
         >
           <Button

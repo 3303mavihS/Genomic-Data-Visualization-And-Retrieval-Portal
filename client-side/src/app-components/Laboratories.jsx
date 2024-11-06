@@ -2,9 +2,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
 import CardActionArea from "@mui/material/CardActionArea";
-import CardActions from "@mui/material/CardActions";
 
 const Laboratories = () => {
   return (
@@ -16,7 +14,6 @@ const Laboratories = () => {
         textAlign: "right",
         alignItems: "start",
         justifyContent: "space-between",
-        // alignContent: "start",
       }}
     >
       <Box
@@ -29,9 +26,9 @@ const Laboratories = () => {
           gap: "15px",
         }}
       >
-        <Typography variant="h1" sx={{ fontSize: "32px", fontWeight: "700" }}>
+        {/* <Typography variant="h1" sx={{ fontSize: "32px", fontWeight: "700" }}>
           Associate Laboratories
-        </Typography>
+        </Typography> */}
         <Typography variant="p" sx={{ fontSize: "20px", fontWeight: "500" }}>
           List of our associate laboratories.
         </Typography>
@@ -45,123 +42,91 @@ const Laboratories = () => {
           }}
         >
           <Card sx={{ width: "100%" }}>
-            <CardActionArea>
+            <CardActionArea
+              target="blank"
+              href="http://www.tezu.ernet.in/dmbbt/profile/21"
+            >
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
+                  Plant-microbe interaction lab,
+                  <br /> Dept. of MBBT,
+                  <br /> Tezpur University
+                </Typography>
+                <Typography variant="body2" sx={{ color: "text.secondary" }}>
                   Prof. S. K. Ray
                 </Typography>
-                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  Plant-microbe interaction lab,
-                  <br /> Dept. of MBBT, Tezpur University
-                </Typography>
               </CardContent>
             </CardActionArea>
-            <CardActions>
-              <Button
-                size="small"
-                color="primary"
-                target="blank"
-                href="http://www.tezu.ernet.in/dmbbt/profile/21"
-              >
-                Visit Website
-              </Button>
-            </CardActions>
           </Card>
 
           <Card sx={{ width: "100%" }}>
-            <CardActionArea>
+            <CardActionArea
+              target="blank"
+              href="http://www.tezu.ernet.in/dmbbt/profile/33"
+            >
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
+                  Genomics and Bioinformatics lab,
+                  <br /> Dept. of MBBT,
+                  <br /> Tezpur University
+                </Typography>
+                <Typography variant="body2" sx={{ color: "text.secondary" }}>
                   Dr. Aditya Kumar
                 </Typography>
-                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  Genomics and Bioinformatics lab,
-                  <br /> Dept. of MBBT, Tezpur University
-                </Typography>
               </CardContent>
             </CardActionArea>
-            <CardActions>
-              <Button
-                size="small"
-                color="primary"
-                target="blank"
-                href="http://www.tezu.ernet.in/dmbbt/profile/33"
-              >
-                Visit Website
-              </Button>
-            </CardActions>
           </Card>
 
           <Card sx={{ width: "100%" }}>
-            <CardActionArea>
+            <CardActionArea
+              target="blank"
+              href="https://www.imtech.res.in/contact/staff/dr-prabhu-b-patil"
+            >
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
+                  CSIR Lab,
+                  <br /> IMTECH Chandigarh
+                </Typography>
+                <Typography variant="body2" sx={{ color: "text.secondary" }}>
                   Dr. Prabhu B. Patil
                 </Typography>
-                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  CSIR Lab, IMTECH Chandigarh
-                </Typography>
               </CardContent>
             </CardActionArea>
-            <CardActions>
-              <Button
-                size="small"
-                color="primary"
-                target="blank"
-                href="https://www.imtech.res.in/contact/staff/dr-prabhu-b-patil"
-              >
-                Visit Website
-              </Button>
-            </CardActions>
           </Card>
 
           <Card sx={{ width: "100%" }}>
-            <CardActionArea>
+            <CardActionArea
+              target="blank"
+              href="https://sites.google.com/view/metsysbiolab"
+            >
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
-                  Dr. Shyam K. Masakapalli
-                </Typography>
-                <Typography variant="body2" sx={{ color: "text.secondary" }}>
                   Metabolic Systems Biology Lab,
                   <br /> IIT Mandi, Himachal Pradesh
                 </Typography>
+                <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                  Dr. Shyam K. Masakapalli
+                </Typography>
               </CardContent>
             </CardActionArea>
-            <CardActions>
-              <Button
-                size="small"
-                color="primary"
-                target="blank"
-                href="https://sites.google.com/view/metsysbiolab"
-              >
-                Visit Website
-              </Button>
-            </CardActions>
           </Card>
 
           <Card sx={{ width: "100%" }}>
-            <CardActionArea>
+            <CardActionArea
+              target="blank"
+              href="http://agnigarh.tezu.ernet.in/~ssankar/index.html"
+            >
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
-                  Prof. S. S. Satapathy
-                </Typography>
-                <Typography variant="body2" sx={{ color: "text.secondary" }}>
                   Computational Biology and <br />
                   Bioinformatics lab, Dept. CSE,
                   <br /> Tezpur University
                 </Typography>
+                <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                  Prof. S. S. Satapathy
+                </Typography>
               </CardContent>
             </CardActionArea>
-            <CardActions>
-              <Button
-                size="small"
-                color="primary"
-                target="blank"
-                href="http://agnigarh.tezu.ernet.in/~ssankar/index.html"
-              >
-                Visite Website
-              </Button>
-            </CardActions>
           </Card>
         </Box>
       </Box>

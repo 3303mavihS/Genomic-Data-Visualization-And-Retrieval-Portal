@@ -1,259 +1,105 @@
-import { Splide, SplideSlide, SplideTrack } from "@splidejs/react-splide";
-import "@splidejs/react-splide/css";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-
 import {
-  rastoniaImage1,
-  rastoniaImage2,
-  rastoniaImage3,
-  rastoniaImage4,
-  rastoniaImage5,
+  isolation_process,
+  rastonia_chromosome,
+  rastonia_graph_legend,
+  rastonia_plasmid,
 } from "../constants";
 
 const Intro = () => {
   return (
     <Box
       component="div"
-      className="verticalCenterTheElement"
-      sx={{
-        width: "100%",
-        textAlign: "right",
-        alignItems: "start",
-        justifyContent: "space-between",
-        // alignContent: "start",
-      }}
+      sx={{ display: "flex", flexDirection: "row", width: "100%", gap: "40px" }}
     >
       <Box
         component="div"
         sx={{
-          width: "100%",
+          width: "80%",
           textAlign: "left",
           display: "flex",
           flexDirection: "column",
-          gap: "15px",
+          gap: "7px",
         }}
       >
-        <Typography variant="h1" sx={{ fontSize: "32px", fontWeight: "700" }}>
-          Ralstonia solanacearum
-        </Typography>
+        {/* <Typography variant="h1" sx={{ fontSize: "32px", fontWeight: "700" }}>
+          Ralstonia solanacearum F1C1
+        </Typography> */}
         <Typography variant="p" sx={{ fontSize: "20px", fontWeight: "500" }}>
           A phytopathogenic bacterium with a wide host range
         </Typography>
         <hr style={{ width: "100%" }} />
-        <Box component="div" sx={{ display: "flex", gap: "20px" }}>
-          <Typography
-            variant="body1"
-            sx={{ textAlign: "justify", width: "calc (100vw - 300px)" }}
-            gutterBottom
-          >
-            Ralstonia solanacearum, previously known as Pseudomonas
-            solanacearum, was originally described by Smith (1896) as the
-            causative agent of bacterial wilt of solanaceous plants. It is
-            internationally recognized as one of the leading models in the
-            analysis of plant pathogenicity. This soil bacterium is the causal
-            agent of a severe and devastating disease of major economical
-            importance on solanaceous crops. It also causes disease on the model
-            plant Arabidopsis thaliana, therefore facilitating analysis of basic
-            molecular mechanisms governing pathogenicity. The high economic and
-            social impact of this organism results from its wide geographical
-            distribution in all warm and tropical countries of the globe. This
-            impact also results from the very wide host range of R. solanacearum
-            which comprises over 200 plant species, representing over 50
-            botanical families and covering both monocots and dicots extending
-            from annual plants to trees and shrubs. Recently, geographical
-            distribution of the pathogen has been extended to more temperate
-            countries from Europe and North America as the result of the
-            dissemination of strains adapted to cooler climates.
-          </Typography>
-          <img
-            src={rastoniaImage1}
-            alt=""
-            style={{ width: "300px", objectFit: "contain" }}
-          />
-        </Box>
-        <Typography variant="body1" sx={{ textAlign: "justify" }} gutterBottom>
-          The sequencing and annotation of the complete genome from strain
-          GMI1000, performed in collaboration with the French sequencing center
-          Genoscope, has been a major achievement which has contributed to the
-          development of genomic resources to study the pathogenicity
-          determinants in this bacterium. GMI1000 is a wide host range strain
-          originally isolated from tomato in French Guyana. It is a race 1
-          biovar 3 strain belonging to Phylotype I. Recently the draft genome
-          sequence of two additional strains was realized. Both strains belong
-          to Phylotype II. Strain Molk2 was isolated from banana in Philippines
-          and is classified as a race 2 strain while strain IPO1609 is race 3
-          (potato) strain isolated in the Netherlands.
-        </Typography>
-        <Box
-          component="div"
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Splide
-            hasTrack={false}
-            options={{
-              width: "960px",
-              type: "loop",
-              perPage: 3,
-              perMove: 1,
-              gap: "30px",
+        <Box component="div" sx={{ display: "flex", flexDirection: "column" }}>
+          <Box component="div">
+            <Typography variant="body1" sx={{ textAlign: "justify" }}>
+              Ralstonia solanacearum is a gram-negative, proteobacterium that is
+              the causative agent of wilt, which is one of the most severe
+              vascular plant diseases in the world, infects more than plant
+              species. This bacterium has a high level of phenotypic and
+              genotypic diversity and has a wide host range with huge geographic
+              distribution. R. solanacearum can survive in soils or in water for
+              years and when it encounters a suitable host, it invades the
+              roots, colonizes their root cortex, invades the xylem vessels, and
+              then colonize and block the entire vascular system. This portal
+              presents the genome annotation of a recently isolated novel strain
+              Ralstonia solanacearum F1C1 from Tezpur locality , more than 450
+              plant species.{" "}
+              <a href="/associate-laboratories" style={{ color: "blue" }}>
+                [associate laboratories]
+              </a>
+            </Typography>
+          </Box>
+          <Box
+            component="div"
+            className="image_div"
+            sx={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "row",
+              alignContent: "center",
+              alignItems: "center",
+              justifyContent: "space-evenly",
             }}
           >
-            <SplideTrack>
-              <SplideSlide>
+            <Box component="div" sx={{ cursor: "pointer", width: "40%" }}>
+              <a href="/dashboard/chromosome">
                 <img
-                  src={rastoniaImage1}
-                  style={{
-                    width: "300px",
-                    height: "300px",
-                    objectFit: "cover",
-                    objectPosition: "center center",
-                  }}
+                  src={rastonia_chromosome}
                   alt=""
+                  style={{ width: "100%" }}
                 />
-              </SplideSlide>
-              <SplideSlide>
-                <img
-                  src={rastoniaImage2}
-                  style={{
-                    width: "300px",
-                    height: "300px",
-                    objectFit: "cover",
-                    objectPosition: "center center",
-                  }}
-                  alt=""
-                />
-              </SplideSlide>
-              <SplideSlide>
-                <img
-                  src={rastoniaImage3}
-                  style={{
-                    width: "300px",
-                    height: "300px",
-                    objectFit: "cover",
-                    objectPosition: "center center",
-                  }}
-                  alt=""
-                />
-              </SplideSlide>
-              <SplideSlide>
-                <img
-                  src={rastoniaImage4}
-                  style={{
-                    width: "300px",
-                    height: "300px",
-                    objectFit: "cover",
-                    objectPosition: "center center",
-                  }}
-                  alt=""
-                />
-              </SplideSlide>
-              <SplideSlide>
-                <img
-                  src={rastoniaImage5}
-                  style={{
-                    width: "300px",
-                    height: "300px",
-                    objectFit: "cover",
-                    objectPosition: "center center",
-                  }}
-                  alt=""
-                />
-              </SplideSlide>
-            </SplideTrack>
-          </Splide>
+              </a>
+            </Box>
+            <Box component="div" sx={{ cursor: "pointer", width: "40%" }}>
+              <a href="/dashboard/megaplasmid">
+                <img src={rastonia_plasmid} alt="" style={{ width: "100%" }} />
+              </a>
+            </Box>
+          </Box>
+          <Box component="div" style={{ margin: "0 auto" }}>
+            <img
+              src={rastonia_graph_legend}
+              alt=""
+              style={{ width: "350px" }}
+            />
+          </Box>
         </Box>
-        <Typography
-          variant="h1"
-          sx={{
-            fontSize: "32px",
-            fontWeight: "700",
-            marginTop: "50px",
-            textAlign: "center",
-          }}
-        >
-          Ralstonia solanacearum in North Eastern Region of India
-        </Typography>
+      </Box>
+      <Box component="div" className="isolation_div" style={{ width: "20%" }}>
         <Box
           component="div"
-          sx={{
+          style={{
             width: "100%",
             display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-evenly",
-            alignItems: "center",
+            flexDirection: "column",
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "20px",
-              margin: "20px",
-            }}
-          >
-            <img
-              src={rastoniaImage1}
-              style={{
-                width: "350px",
-                height: "350px",
-                objectFit: "cover",
-                objectPosition: "center center",
-              }}
-            />
-            <Typography
-              variant="p"
-              sx={{ fontSize: "20px", fontWeight: "500" }}
-            >
-              Chromosome
-            </Typography>
-            <Button
-              variant="contained"
-              size="large"
-              sx={{ height: "56px", width: "180px" }}
-            >
-              View
-            </Button>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "20px",
-              margin: "20px",
-            }}
-          >
-            <img
-              src={rastoniaImage4}
-              style={{
-                width: "350px",
-                height: "350px",
-                objectFit: "cover",
-                objectPosition: "center center",
-              }}
-            />
-            <Typography
-              variant="p"
-              sx={{ fontSize: "20px", fontWeight: "500" }}
-            >
-              Plasmid
-            </Typography>
-            <Button
-              variant="contained"
-              size="large"
-              sx={{ height: "56px", width: "180px" }}
-            >
-              View
-            </Button>
-          </Box>
+          <img
+            src={isolation_process}
+            alt=""
+            style={{ width: "100%", objectFit: "contain" }}
+          />
         </Box>
       </Box>
     </Box>

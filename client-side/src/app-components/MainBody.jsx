@@ -1,7 +1,7 @@
 import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
 import { Routes, Route } from "react-router-dom";
-import MainApp from "../main-app/components/MainApp";
+import VisualizedData from "../main-app/components/VisualizedData";
 import AddData from "../hidden-feature/components/AddData";
 import DialogBox from "../main-app/components/DialogBox";
 import SearchByGenePositionRange from "../main-app/components/SearchByGenePositionRange";
@@ -21,7 +21,7 @@ const MainBody = ({ component, sx }) => {
       <DialogBox dialogData={dialogData} />
 
       <Routes>
-        <Route path="/" element={<MainApp />} />
+        <Route path="/" element={<VisualizedData />} />
         <Route path="search-in-gene-data" element={<SearchInGeneData />} />
         <Route path="search-by-gene-size" element={<SearchByGeneSize />} />
         <Route

@@ -17,7 +17,7 @@ import {
 
 const rectHeight = 23; // Height for all rectangles
 
-const MainApp = () => {
+const VisualizedData = () => {
   const ref = useRef(null);
   const [dataRec, setDataRec] = useState(null);
   const [lastPoint, setLastPoint] = useState(0);
@@ -106,29 +106,6 @@ const MainApp = () => {
     <React.Fragment>
       <CssBaseline />
       <Box ref={ref}>
-        <Stack direction={"row"} spacing={2}>
-          <Box
-            component="div"
-            className="verticalCenterTheElement"
-            sx={{
-              width: "100%",
-              textAlign: "right",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography
-              variant="h1"
-              sx={{ fontSize: "32px", fontWeight: "700" }}
-            >
-              Ralstonia Gene
-            </Typography>
-            <Button variant="contained" size="large" download>
-              <FormatAlignCenterOutlinedIcon />
-            </Button>
-          </Box>
-        </Stack>
-        <hr />
         <Box component="div" className="contentDiv" sx={{ background: "" }}>
           <Box
             component="div"
@@ -202,4 +179,4 @@ const MainApp = () => {
   );
 };
 
-export default MainApp;
+export default VisualizedData;
