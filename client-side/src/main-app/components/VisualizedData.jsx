@@ -1,21 +1,21 @@
 import * as React from "react";
 import { useEffect, useRef } from "react";
 import { useState } from "react";
-import CssBaseline from "@mui/material/CssBaseline";
-import Box from "@mui/material/Box";
+
 import Stack from "@mui/material/Stack";
 import { Typography } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Canvas from "./canvas-component/Canvas";
-import FormatAlignCenterOutlinedIcon from "@mui/icons-material/FormatAlignCenterOutlined";
-
 import {
   serverGetLastEndPoint,
   serverSlideUrl,
 } from "../services/mainAppApiCallConstants";
+import { useSelector } from "react-redux";
 
-const rectHeight = 23; // Height for all rectangles
+const rectHeight = 19; // Height for all rectangles
 
 const VisualizedData = () => {
   const ref = useRef(null);
@@ -25,12 +25,18 @@ const VisualizedData = () => {
   const [activeKey, setActiveKey] = useState(1);
   const [slideBegin, setSlideBegin] = useState(1);
   const [slideEnd, setSlideEnd] = useState(100000);
+  // const dat = useSelector((state) => state.globalData.currentDataValue);
+  const bread = useSelector((state) => state.globalData.breadCrumb);
+  const dat = sessionStorage.getItem("dat");
+  console.log(dat);
+
   const getlastEndPoint = async () => {
     try {
-      const response = await fetch(serverGetLastEndPoint);
+      const url = `${serverGetLastEndPoint}/params?dat=${dat}`;
+      console.log(url);
+      const response = await fetch(url);
       if (response.ok) {
         const data = await response.json();
-        //console.log(data.EndPoint);
         setLastPoint(data?.EndPoint);
       }
     } catch (err) {
@@ -55,15 +61,8 @@ const VisualizedData = () => {
      * Creating url to fetch the data for the current slide
      * passign parameters and slide no.
      */
-    const url =
-      serverSlideUrl +
-      "/" +
-      key +
-      "/params?begin=" +
-      beginParam +
-      "&end=" +
-      endParam;
-    //console.log("Url : ", url);
+    const url = `${serverSlideUrl}/${key}/params?dat=${dat}&begin=${beginParam}&end=${endParam}`;
+    console.log("Url : ", url);
 
     try {
       const response = await fetch(url);
@@ -106,6 +105,40 @@ const VisualizedData = () => {
     <React.Fragment>
       <CssBaseline />
       <Box ref={ref}>
+        <Stack direction={"row"} spacing={2}>
+          <Box
+            component="div"
+            className="verticalCenterTheElement"
+            sx={{
+              width: "100%",
+              textAlign: "right",
+              alignItems: "start",
+              justifyContent: "space-between",
+            }}
+          >
+            <Box
+              component="div"
+              sx={{
+                width: "100%",
+                textAlign: "left",
+              }}
+            >
+              <Typography
+                variant="h1"
+                sx={{ fontSize: "32px", fontWeight: "700" }}
+              >
+                Visualized Data of Rastonia Solanacearum F1C1 {"- " + bread}
+              </Typography>
+
+              <Typography variant="body1" sx={{ mt: 2 }} gutterBottom>
+                A visual of Ralstonia solanacearum F1C1 genomic data, showing
+                its structure as "candles," each representing a gene with start
+                and end points marking its length.
+              </Typography>
+            </Box>
+          </Box>
+        </Stack>
+        <hr />
         <Box component="div" className="contentDiv" sx={{ background: "" }}>
           <Box
             component="div"
@@ -120,7 +153,7 @@ const VisualizedData = () => {
               data={dataRec?.data}
               rectHeight={rectHeight}
               width={canvasWidth >= 1000 ? canvasWidth : 1000} // Numeric value
-              height={660} // Numeric value
+              height={560} // Numeric value
               style={{
                 background: "#fff",
               }}

@@ -19,31 +19,29 @@ import LaunchIcon from "@mui/icons-material/Launch";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { serverSaveFileContentUrl } from "../services/apiCallConstants";
+import { Link } from "react-router-dom";
 
 const columns = [
-  { id: "SlNo", label: "SlNo", align: "center" },
-  { id: "Begin", label: "Begin", align: "left" },
-  { id: "End", label: "End", align: "left" },
+  { id: "SlNo", label: "Sl No", align: "center" },
+  { id: "Begin", label: "Start", align: "left" },
+  { id: "End", label: "Stop", align: "left" },
   { id: "Strand", label: "Strand", align: "center" },
+  { id: "Label", label: "Locus Tag", align: "center" },
+  { id: "Type", label: "Gene Type", align: "center" },
+  { id: "Gene", label: "Gene Name", align: "center" },
+  { id: "Product", label: "Gene Product", align: "left", minwidth: 500 },
   {
     id: "NucleotideSeq",
     label: "Nucleotide Sequence",
     align: "left",
     minwidth: 370,
   },
-  { id: "Label", label: "Label", align: "center" },
-  { id: "Type", label: "Type", align: "center" },
-  { id: "Frame", label: "Frame", align: "center" },
-  { id: "Length", label: "Length", align: "center" },
-  { id: "Evidence", label: "Evidence", align: "center" },
-  { id: "Mutation", label: "Mutation", align: "center" },
-  { id: "Gene", label: "Gene", align: "center" },
-  { id: "Synonyms", label: "Synonyms", align: "center" },
-  { id: "Product", label: "Product", align: "left", minwidth: 500 },
-  { id: "Class", label: "Class", align: "left", minwidth: 500 },
-  { id: "ProductType", label: "ProductType", align: "left" },
-  { id: "Localization", label: "Localization", align: "left" },
-  { id: "Roles", label: "Roles", align: "left", maxwidth: 500 },
+  {
+    id: "AminoAcidSeq",
+    label: "Amino Acid Sequence",
+    align: "left",
+    minwidth: 370,
+  },
 ];
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -91,7 +89,9 @@ const VerifyAndSaveData = ({ fileContent }) => {
   const [dataSaved, setDataSaved] = React.useState(false);
   const [savingProgress, setSavingProgress] = React.useState(false);
   const [progress, setProgress] = React.useState(0);
+  const [dat, setDat] = React.useState("");
   let genome = genomeName;
+
   // console.log(fileContent);
   /**
    * after uploading the file the server
@@ -120,7 +120,8 @@ const VerifyAndSaveData = ({ fileContent }) => {
       });
       if (response.status === 200) {
         const data = await response.json();
-        console.log(data);
+        console.log(data.dat);
+        setDat(data.dat);
         // Simulate progress
         for (let i = 20; i <= 100; i += 5) {
           setProgress(i); // Increase progress
@@ -181,14 +182,19 @@ const VerifyAndSaveData = ({ fileContent }) => {
             </Button>
           )}
           {progress === 100 && (
-            <Button
-              variant="contained"
-              size="large"
-              startIcon={<LaunchIcon />}
-              sx={{ height: "56px" }}
-            >
-              Visit {genome}
-            </Button>
+            <Link to="/dashboard">
+              <Button
+                variant="contained"
+                size="large"
+                startIcon={<LaunchIcon />}
+                sx={{ height: "56px" }}
+                onClick={() => {
+                  sessionStorage.setItem("dat", dat);
+                }}
+              >
+                Visit {genome}
+              </Button>
+            </Link>
           )}
         </Box>
 

@@ -12,23 +12,26 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import FormatAlignCenterOutlinedIcon from "@mui/icons-material/FormatAlignCenterOutlined";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { serverGetTheGeneDataByNucSeq } from "../services/mainAppApiCallConstants";
+import { useSelector } from "react-redux";
 
 const SearchByGeneSequence = () => {
   const ref = useRef(null);
   const [seq, setSeq] = useState("");
   const [dataRec, setDataRec] = useState(null);
   const [dataFound, setDataFound] = useState(false);
+  // const dat = useSelector((state) => state.globalData.currentDataValue);
+  const dat = sessionStorage.getItem("dat");
 
   //get the result for the sequence
   const getGeneBySequence = async (seq) => {
     if (seq !== "") {
       try {
         //code
-        const response = await fetch(serverGetTheGeneDataByNucSeq, {
+        const url = `${serverGetTheGeneDataByNucSeq}/params?dat=${dat}`;
+        const response = await fetch(url, {
           method: "POST",
           headers: {
             "Content-Type": "application/json", // Important to specify the JSON content type

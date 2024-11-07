@@ -62,7 +62,8 @@ const Header = ({ position }) => {
   // const currentTheme = useSelector((state) => state.element.toggleTheme);
   //access global toggle sidebar state
   const showSidebar = useSelector((state) => state.element.toggleSideBar);
-
+  // const bread = useSelector((state) => state.globalData.breadCrumb);
+  const bread = sessionStorage.getItem("breadCrumb");
   //change the theme value and dispatch it to global state
   // const changeCurrentTheme = () => {
   //   if (currentTheme === "dark") {
@@ -106,7 +107,7 @@ const Header = ({ position }) => {
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
           >
-            Ralstonia Solanacearum F1C1
+            Ralstonia Solanacearum F1C1 {"- " + bread}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           {/* <Search>

@@ -49,7 +49,7 @@ const App = () => {
             <Route path="intro" element={<Intro />} />
             <Route path="associate-laboratories" element={<Laboratories />} />
           </Route>
-          <Route path="/dashboard/:genome" element={<Dashboard />}>
+          <Route path="/dashboard" element={<Dashboard />}>
             <Route path="search-in-gene-data" element={<SearchInGeneData />} />
             <Route path="search-by-gene-size" element={<SearchByGeneSize />} />
             <Route
@@ -64,8 +64,8 @@ const App = () => {
               path="export-gene-sequence"
               element={<ExportGeneSequence />}
             />
-            <Route path="add-new-genome-data" element={<AddData />} />
           </Route>
+          <Route path="/add-new-genome-data" element={<AddData />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

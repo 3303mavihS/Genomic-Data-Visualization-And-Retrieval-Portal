@@ -8,11 +8,14 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+
 //this will return the last Row's End value so that it can be used on front end
 export const returnLastPointOfData = async (req, res) => {
   try {
-    const collection = database.collection("modified_ralstoniagenedetails");
-
+    const {dat} = req.query;
+    //console.log(dat);
+    const collection = database.collection(dat);
+    
     // Ensure we treat "End" as a number and sort by "End" in descending order
     const highestEndDocument = await collection
       .aggregate([
@@ -51,11 +54,13 @@ export const returnSlideData = async (req, res) => {
     const { slideNo } = req.params; // Get slide number from the path
     const begin = parseInt(req.query.begin, 10); // Convert begin to an integer
     const end = parseInt(req.query.end, 10); // Convert end to an integer
-
+   
     // Use slideNo, begin, and end as needed, e.g.
-    console.log(`Slide Number: ${slideNo}, Begin: ${begin}, End: ${end}`);
+    //console.log(`Slide Number: ${slideNo}, Begin: ${begin}, End: ${end}`);
     //return the response
-    const collection = database.collection("modified_ralstoniagenedetails");
+    const {dat} = req.query;
+    //console.log(dat);
+    const collection = database.collection(dat);
 
     const genomeData = await collection
       .find({
@@ -85,17 +90,18 @@ export const returnSearchByGenePositionRange = async (req, res) => {
     const begin = parseInt(req.query.begin, 10); // Convert begin to an integer
     const end = parseInt(req.query.end, 10); // Convert end to an integer
     // Use slideNo, begin, and end as needed, e.g.
-    console.log(`Begin: ${begin}, End: ${end}`);
+    //console.log(`Begin: ${begin}, End: ${end}`);
     // Adjust the begin and end to the nearest multiple of 100000
     const adjustedBegin = Math.floor(begin / 100000) * 100000;
     const adjustedEnd = Math.ceil(end / 100000) * 100000;
 
-    console.log(`Begin: ${begin}, End: ${end}`);
-    console.log(
-      `Adjusted Begin: ${adjustedBegin}, Adjusted End: ${adjustedEnd}`
-    );
-    //return the response
-    const collection = database.collection("modified_ralstoniagenedetails");
+    // console.log(`Begin: ${begin}, End: ${end}`);
+    // console.log(
+    //   `Adjusted Begin: ${adjustedBegin}, Adjusted End: ${adjustedEnd}`
+    // );
+    const {dat} = req.query;
+    //console.log(dat);
+    const collection = database.collection(dat);
 
     const genomeData = await collection
       .find({
@@ -131,7 +137,9 @@ export const returnGeneData = async (req, res) => {
       return res.status(400).json({ error_message: "Gene ID is required" });
     }
 
-    const collection = database.collection("modified_ralstoniagenedetails");
+    const {dat} = req.query;
+    //console.log(dat);
+    const collection = database.collection(dat);
 
     // Convert gene_id to ObjectId if necessary
     const geneData = await collection.findOne({ _id: new ObjectId(gene_id) });
@@ -151,12 +159,12 @@ export const returnGeneData = async (req, res) => {
 export const returnGeneDataByNextPrevBtn = async (req, res) => {
   try {
     //code
-    const { gene_slno } = req.query;
+    const { gene_slno,dat } = req.query;
     if (!gene_slno) {
       return res.status(400).json({ error_message: "gene_slno is required" });
     }
-
-    const collection = database.collection("modified_ralstoniagenedetails");
+    //console.log(dat);
+    const collection = database.collection(dat);
 
     // Find the gene document by slno
     const geneData = await collection.findOne({
@@ -185,8 +193,10 @@ export const returnGeneBySeq = async (req, res) => {
       return res.status(400).json({ error_message: "gene_seq is required" });
     }
     // Log the received sequence for debugging
-    console.log("Received gene sequence:", gene_seq);
-    const collection = database.collection("modified_ralstoniagenedetails");
+    //console.log("Received gene sequence:", gene_seq);
+    const {dat} = req.query;
+    //console.log(dat);
+    const collection = database.collection(dat);
     // Find the gene by NucleotideSeq
     const geneData = await collection.findOne({ NucleotideSeq: gene_seq });
 
@@ -216,14 +226,16 @@ export const returnGeneByLength = async (req, res) => {
     }
 
     // Log the received lengths for debugging
-    console.log(
-      "Received min and max length: ",
-      gene_min_length,
-      gene_max_length
-    );
+    // console.log(
+    //   "Received min and max length: ",
+    //   gene_min_length,
+    //   gene_max_length
+    // );
 
     // Access the collection
-    const collection = database.collection("modified_ralstoniagenedetails");
+    const {dat} = req.query;
+    //console.log(dat);
+    const collection = database.collection(dat);
 
     // Use aggregation to convert Length to a number and filter by range
     const genes = await collection
@@ -282,7 +294,7 @@ export const returnGeneByLength = async (req, res) => {
 //export the gene sequence based on start and end index
 export const exportGeneSequence = async (req,res)=>{
   const { beginIndex, endIndex } = req.query;
-  console.log(beginIndex,endIndex);
+  // console.log(beginIndex,endIndex);
   const begin = parseInt(beginIndex);
   const end = parseInt(endIndex)+1;
 
@@ -339,24 +351,22 @@ const formattedSequence = lines.join('\n');
 
 //return the result of the keyword found in the database of gene data
 export const returnSearchInGeneData = async (req, res) => {
-  const { keyword } = req.query;
-  console.log(`Searching for keyword: ${keyword}`);
+  
   
   try {
     // Access the collection
-    const collection = database.collection("modified_ralstoniagenedetails");
+    // const collection = database.collection("modified_ralstoniagenedetails");
+    const { keyword,dat } = req.query;
+  // console.log(`Searching for keyword: ${keyword}`);
+    //console.log(dat);
+    const collection = database.collection(dat);
 
     // Perform a case-insensitive search on multiple fields using $or and $regex
     const searchResult = await collection.find({
       $or: [
-        { Type: { $regex: keyword, $options: "i" } },
+        { Label: { $regex: keyword, $options: "i" } },
         { Gene: { $regex: keyword, $options: "i" } },
-        { Synonyms: { $regex: keyword, $options: "i" } },
         { Product: { $regex: keyword, $options: "i" } },
-        { Class: { $regex: keyword, $options: "i" } },
-        { ProductType: { $regex: keyword, $options: "i" } },
-        { Localization: { $regex: keyword, $options: "i" } },
-        { Roles: { $regex: keyword, $options: "i" } },
       ],
     }).toArray();
 

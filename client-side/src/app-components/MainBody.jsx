@@ -33,7 +33,6 @@ const MainBody = ({ component, sx }) => {
           element={<SearchByGenePositionRange />}
         />
         <Route path="export-gene-sequence" element={<ExportGeneSequence />} />
-        <Route path="add-new-genome-data" element={<AddData />} />
       </Routes>
     </Box>
   );

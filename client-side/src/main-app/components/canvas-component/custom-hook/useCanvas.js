@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { setToggleDialogBox } from "../../../../state-management/feature/elementReducer";
 import { setGeneData } from "../../../../state-management/feature/dataReducer";
 
+
 // Helper function to format numbers (e.g., 10000 -> 10k, 56400 -> 56.4k)
 const formatNumber = (num) => {
   if (num >= 1000 && num < 1000000) {
@@ -13,46 +14,8 @@ const formatNumber = (num) => {
   }
   return num.toString();
 };
-//return random colors from a set of colors
-function randomColor() {
-  // Define a set of vibrant, minimal colors
-  const colorSet = [
-    "#FF6F61", // Coral
-    "#88B04B", // Light Green
-    "#F7CAC9", // Light Pink
-    "#92A8D1", // Soft Blue
-    "#F7786B", // Peach
-    "#3498dd", // Dark Cyan
-    "#B565A7", // Purple
-    "#009B77", // Teal
-    "#EFC050", // Soft Gold
-    "#45B8AC", // Aqua
-    "#DFCFBE", // Sand
-    "#98B4D4", // Periwinkle
-    "#FFB347", // Light Orange
-    "#D4A5A5", // Soft Red
-    "#AFD275", // Lime Green
-    "#E15D44", // Terra Cotta
 
-    "#fc5101",
-    "#a81149",
-    "#0091cf",
-    "#d0eb27",
-    "#fabd00",
-    "#fe2209",
-    "#8700b0",
-    "#0144fe",
-    "#65b12e",
-    "#fdfe2f",
-    "#fb9a00",
-  ];
 
-  // Return a random color from the set
-
-  const randomIndex = Math.floor(Math.random() * colorSet.length);
-  ////console.log(colorSet[randomIndex]);
-  return colorSet[randomIndex];
-}
 
 const useCanvas = (props) => {
   const dispatch = useDispatch();
@@ -234,6 +197,7 @@ const useCanvas = (props) => {
   
     // Fill and stroke the shape
     ctx.fill();
+    ctx.strokeStyle= "#2F2F2F"
     ctx.stroke();
   
     // Store rectangle data for future use
@@ -269,7 +233,7 @@ const useCanvas = (props) => {
   ) => {
     ctx.fillStyle = color;
     ctx.font = fontStyle;
-    ctx.fillText(text, xValue-10+width/2, strand === "+" ? yValue - 8 : yValue + 14.5);
+    ctx.fillText(text, xValue-10+width/2, strand === "+" ? yValue - 7 : yValue + 12);
   };
 
   /**
@@ -357,14 +321,33 @@ const useCanvas = (props) => {
   const drawElement = (ctx, data, rectHeight, strand) => {
     let lineBeginParameter = pageBeginPoint;
     let lineEndParameter = pageBeginPoint + pageRange - 1;
-    const fontStyle = "bold 10px Open Sans";
-    const fontColor = "black";
-    //console.log("Starting Row :", row," Line Begin : ", lineBeginParameter," Line End : ", lineEndParameter,"New Y-coordinate : ", yValue);
+    const fontStyle = "bold 9px Open Sans";
+    
+    //console.log("Starting Row :", row," Line Begin : ", lineBeginParameter," Line End : ", lineEndParameter,"New Y-coordinate : ", yValue);#00928D 
+    const colorMap = {
+      "CDS": {
+        "+": "#14A5A0",
+        "-": "#AAD8D7" //#97D7D5
+      },
+      "tRNA": {
+        "+": "#89520B",
+        "-": "#F39D2F"
+      },
+      "tmRNA": {
+        "+": "#F8DEA7",
+        "-": "#CFD8F7"
+      },
+      "rRNA": {
+        "+": "#E0C07A",
+        "-": "#F8DEA7"
+      }
+    };
     
 
     data?.forEach((element) => {
       const text = element.Gene===""?element.Label.slice(-4):element.Gene;
-      const color = element.color;
+      const color = colorMap[element.Type][element.Strand];
+      const fontColor = element.color!=="#02665E"?"black":"white";
       const elementEnd = element.End - 50;
       /** Update row and parameters if the element starts after the current range */
       if (element.Begin > lineEndParameter && elementEnd <= pageEndPoint) {
@@ -555,8 +538,9 @@ const useCanvas = (props) => {
           // //console.log(`Rectangle id is : ${rectangle.id}`);
           // Perform any action on click
           try {
+            const dat = sessionStorage.getItem("dat");
             //code to fetch the data for the particular rectangle
-            const url = serverGetTheGeneData + "?gene_id=" + rectangle.id;
+            const url = serverGetTheGeneData + "/params?dat="+dat+"&gene_id=" + rectangle.id;
 
             const response = await fetch(url);
             if (response.status === 200) {

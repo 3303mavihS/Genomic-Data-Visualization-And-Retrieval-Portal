@@ -11,12 +11,12 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Canvas from "./canvas-component/Canvas";
-import FormatAlignCenterOutlinedIcon from "@mui/icons-material/FormatAlignCenterOutlined";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import {
   serverGetLastEndPoint,
   serverSearchByGenePositionRangeUrl,
 } from "../services/mainAppApiCallConstants";
+import { useSelector } from "react-redux";
 
 const validateInputs = (begin, end, lastPoint) => {
   // Ensure values are numbers
@@ -52,7 +52,7 @@ const validateInputs = (begin, end, lastPoint) => {
   return true;
 };
 
-const rectHeight = 23; // Height for all rectangles
+const rectHeight = 19; // Height for all rectangles
 
 const SearchByGenePositionRange = () => {
   const ref = useRef(null);
@@ -65,13 +65,17 @@ const SearchByGenePositionRange = () => {
   const [activeKey, setActiveKey] = useState(1);
   const [slideBegin, setSlideBegin] = useState(dataRec?.range.adjustedBegin);
   const [slideEnd, setSlideEnd] = useState(100000);
+  // const dat = useSelector((state) => state.globalData.currentDataValue);
+  const dat = sessionStorage.getItem("dat");
+  console.log(dat);
 
   const getlastEndPoint = async () => {
     try {
-      const response = await fetch(serverGetLastEndPoint);
+      const url = `${serverGetLastEndPoint}/params?dat=${dat}`;
+      console.log(url);
+      const response = await fetch(url);
       if (response.ok) {
         const data = await response.json();
-        console.log(data.EndPoint);
         setLastPoint(data?.EndPoint);
       }
     } catch (err) {
@@ -80,18 +84,13 @@ const SearchByGenePositionRange = () => {
   };
 
   const getGenePositionRange = async (begin, end) => {
-    const last = getlastEndPoint();
+    const last = lastPoint;
     const valid = validateInputs(begin, end, last);
     if (valid) {
       try {
         //do the working
-        const url =
-          serverSearchByGenePositionRangeUrl +
-          "?begin=" +
-          begin +
-          "&end=" +
-          end;
-        console.log(url);
+        const url = `${serverSearchByGenePositionRangeUrl}/params?dat=${dat}&begin=${begin}&end=${end}`;
+        // console.log(url);
         const response = await fetch(url);
         if (response.status === 200) {
           const data = await response.json();
@@ -151,7 +150,9 @@ const SearchByGenePositionRange = () => {
   };
 
   useEffect(() => {
-    console.log(lastPoint);
+    // const last  = getlastEndPoint()
+    setLastPoint(getlastEndPoint());
+    //console.log(lastPoint);
     // // Initialize ResizeObserver
     const resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
@@ -289,7 +290,7 @@ const SearchByGenePositionRange = () => {
                 data={dataRec?.data}
                 rectHeight={rectHeight}
                 width={canvasWidth >= 1000 ? canvasWidth : 1000} // Numeric value
-                height={660} // Numeric value
+                height={560} // Numeric value
                 style={{
                   background: "#fff",
                 }}

@@ -6,7 +6,7 @@ import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { Typography } from "@mui/material";
+import { AppBar, CssBaseline, Toolbar, Typography } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import { serverSampleFileDownloadUrl } from "../services/apiCallConstants";
 import VerifyAndSaveData from "./VerifyAndSaveData";
@@ -17,62 +17,87 @@ const AddData = () => {
     setFileContentRec(data);
   };
   return (
-    <Box>
-      <Stack direction={"row"} spacing={2}>
-        <Box
-          component="div"
-          sx={{
-            width: "100%",
-          }}
+    <React.Fragment>
+      <CssBaseline />
+      <Box sx={{ display: "flex" }}>
+        <AppBar
+          position="fixed"
+          sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
         >
-          <Typography variant="h2" sx={{ fontSize: "32px", fontWeight: "700" }}>
-            Add New Genome Data
-          </Typography>
-          <Breadcrumbs
-            aria-label="breadcrumb"
+          <Toolbar>
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{ display: { xs: "none", sm: "block" } }}
+            >
+              Upload New Data
+            </Typography>
+            <Box sx={{ flexGrow: 1 }} />
+          </Toolbar>
+        </AppBar>
+      </Box>
+      <Box sx={{ flexGrow: 1, p: 3 }}>
+        <Toolbar />
+        <Stack direction={"row"} spacing={2}>
+          <Box
+            component="div"
             sx={{
-              width: "inline",
-              textAlign: "right",
-              fontSize: "14px",
-              mt: 2,
+              width: "100%",
             }}
           >
-            <Link underline="hover" color="inherit" href="/">
-              Home
-            </Link>
-            <Link underline="none" color="text.primary" aria-current="page">
-              {!fileContentRec && "Upload New Genome Data"}
-              {fileContentRec && "Save File In Database"}
-            </Link>
-          </Breadcrumbs>
-        </Box>
-        <Box
-          component="div"
-          className="verticalCenterTheElement"
-          sx={{
-            width: "100%",
-            textAlign: "right",
-            justifyContent: "end",
-            alignContent: "start",
-          }}
-        >
-          <Button
-            variant="contained"
-            size="large"
-            href={serverSampleFileDownloadUrl}
-            download
-            startIcon={<DownloadIcon />}
+            <Typography
+              variant="h2"
+              sx={{ fontSize: "32px", fontWeight: "700" }}
+            >
+              Add New Genome Data
+            </Typography>
+            <Breadcrumbs
+              aria-label="breadcrumb"
+              sx={{
+                width: "inline",
+                textAlign: "right",
+                fontSize: "14px",
+                mt: 2,
+              }}
+            >
+              <Link underline="hover" color="inherit" href="/">
+                Home
+              </Link>
+              <Link underline="none" color="text.primary" aria-current="page">
+                {!fileContentRec && "Upload New Genome Data"}
+                {fileContentRec && "Save File In Database"}
+              </Link>
+            </Breadcrumbs>
+          </Box>
+          <Box
+            component="div"
+            className="verticalCenterTheElement"
+            sx={{
+              width: "100%",
+              textAlign: "right",
+              justifyContent: "end",
+              alignContent: "start",
+            }}
           >
-            Download Sample Data
-          </Button>
-        </Box>
-      </Stack>
-      <hr />
-      {fileContentRec === null && <UploadFile setData={setDataFromChild} />}
-      {fileContentRec !== null && (
-        <VerifyAndSaveData fileContent={fileContentRec} />
-      )}
-    </Box>
+            <Button
+              variant="contained"
+              size="large"
+              href={serverSampleFileDownloadUrl}
+              download
+              startIcon={<DownloadIcon />}
+            >
+              Download Sample Data
+            </Button>
+          </Box>
+        </Stack>
+        <hr />
+        {fileContentRec === null && <UploadFile setData={setDataFromChild} />}
+        {fileContentRec !== null && (
+          <VerifyAndSaveData fileContent={fileContentRec} />
+        )}
+      </Box>
+    </React.Fragment>
   );
 };
 

@@ -37,7 +37,7 @@ const LeftSideDrawer = ({ variant, sx }) => {
             </ListItemButton>
           </NavLink>
 
-          <NavLink to={`/dashboard/${genome}`}>
+          <NavLink to={`/dashboard`}>
             <ListItemButton
               selected={selectedButtonKey === 1}
               onClick={() => handleListButtonClick(1)}
@@ -49,7 +49,7 @@ const LeftSideDrawer = ({ variant, sx }) => {
             </ListItemButton>
           </NavLink>
 
-          <NavLink to={`/dashboard/${genome}/search-in-gene-data`}>
+          <NavLink to={`/dashboard/search-in-gene-data`}>
             <ListItemButton
               selected={selectedButtonKey === 2}
               onClick={() => handleListButtonClick(2)}
@@ -61,7 +61,7 @@ const LeftSideDrawer = ({ variant, sx }) => {
             </ListItemButton>
           </NavLink>
 
-          <NavLink to={`/dashboard/${genome}/search-by-nucleotide-seq`}>
+          <NavLink to={`/dashboard/search-by-nucleotide-seq`}>
             <ListItemButton
               selected={selectedButtonKey === 3}
               onClick={() => handleListButtonClick(3)}
@@ -73,7 +73,7 @@ const LeftSideDrawer = ({ variant, sx }) => {
             </ListItemButton>
           </NavLink>
 
-          <NavLink to={`/dashboard/${genome}/search-in-position-range`}>
+          <NavLink to={`/dashboard/search-in-position-range`}>
             <ListItemButton
               selected={selectedButtonKey === 4}
               onClick={() => handleListButtonClick(4)}
@@ -85,7 +85,7 @@ const LeftSideDrawer = ({ variant, sx }) => {
             </ListItemButton>
           </NavLink>
 
-          <NavLink to={`/dashboard/${genome}/search-by-gene-size`}>
+          <NavLink to={`/dashboard/search-by-gene-size`}>
             <ListItemButton
               selected={selectedButtonKey === 5}
               onClick={() => handleListButtonClick(5)}
@@ -97,7 +97,7 @@ const LeftSideDrawer = ({ variant, sx }) => {
             </ListItemButton>
           </NavLink>
 
-          <NavLink to={`/dashboard/${genome}/export-gene-sequence`}>
+          <NavLink to={`/dashboard/export-gene-sequence`}>
             <ListItemButton
               selected={selectedButtonKey === 6}
               onClick={() => handleListButtonClick(6)}
@@ -106,18 +106,6 @@ const LeftSideDrawer = ({ variant, sx }) => {
                 <ExitToAppIcon />
               </ListItemIcon>
               <ListItemText primary="Export Gene Sequence" />
-            </ListItemButton>
-          </NavLink>
-
-          <NavLink to={`/dashboard/${genome}/add-new-genome-data`}>
-            <ListItemButton
-              selected={selectedButtonKey === 7}
-              onClick={() => handleListButtonClick(7)}
-            >
-              <ListItemIcon>
-                <UploadOutlinedIcon />
-              </ListItemIcon>
-              <ListItemText primary="Upload Genome Data" />
             </ListItemButton>
           </NavLink>
         </List>

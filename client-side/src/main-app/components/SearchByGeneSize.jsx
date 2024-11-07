@@ -11,9 +11,9 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Canvas from "./canvas-component/Canvas";
-import FormatAlignCenterOutlinedIcon from "@mui/icons-material/FormatAlignCenterOutlined";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import { serverGetLengthRangeDataUrl } from "../services/mainAppApiCallConstants";
+import { useSelector } from "react-redux";
 
 const validateInputs = (min, max) => {
   const maxLimit = 5000;
@@ -32,7 +32,7 @@ const validateInputs = (min, max) => {
     return false;
   }
 
-  if (min >= max) {
+  if (min > max) {
     alert(
       "Min Length value cannot be greater than or equal to Max Length value."
     );
@@ -49,7 +49,7 @@ const validateInputs = (min, max) => {
   return true;
 };
 
-const rectHeight = 23; // Height for all rectangles
+const rectHeight = 19; // Height for all rectangles
 
 const SearchByGeneSize = () => {
   const ref = useRef(null);
@@ -62,6 +62,7 @@ const SearchByGeneSize = () => {
   const [slideBegin, setSlideBegin] = useState(1);
   const [slideEnd, setSlideEnd] = useState(100000);
   const [lastPoint, setLastPoint] = useState();
+  const dat = useSelector((state) => state.globalData.currentDataValue);
 
   const getLengthRangeData = async (min, max) => {
     const valid = validateInputs(min, max);
@@ -70,7 +71,9 @@ const SearchByGeneSize = () => {
         //do the working
         const url =
           serverGetLengthRangeDataUrl +
-          "?gene_min_length=" +
+          "/params?dat=" +
+          dat +
+          "&gene_min_length=" +
           minLength +
           "&gene_max_length=" +
           maxLength;
@@ -102,38 +105,6 @@ const SearchByGeneSize = () => {
     setSlideBegin(beginParam);
     setSlideEnd(endParam);
     console.log("Begin : ", beginParam, " End : ", endParam);
-
-    /**
-     * Creating url to fetch the data for the current slide
-     * passign parameters and slide no.
-     */
-    // const url =
-    //   serverSlideUrl +
-    //   "/" +
-    //   key +
-    //   "/params?begin=" +
-    //   beginParam +
-    //   "&end=" +
-    //   endParam;
-    // console.log("Url : ", url);
-
-    // try {
-    //   const response = await fetch(url);
-    //   if (response.status === 200) {
-    //     const data = await response.json();
-    //     console.log(data);
-    //     /**
-    //      * Since the each go to slide get the data between the slide range of 1lakh
-    //      * and send the new data to canvas that triggers the rerender of the canvas with new and less data
-    //      * but here we on this range search page the data has already been retrieved in one go
-    //      * and sent to canvas since canvas can not show the whole data because of the our code
-    //      * when the slide range changes the rerender happen but with our code it show the already sent data
-    //      */
-    //     // setDataRec(data);
-    //   }
-    // } catch (err) {
-    //   console.log("error_message : ", err.message);
-    // }
   };
 
   useEffect(() => {
@@ -273,9 +244,8 @@ const SearchByGeneSize = () => {
                 data={dataRec?.genes}
                 rectHeight={rectHeight}
                 width={canvasWidth >= 900 ? canvasWidth - 2 : 900} // Numeric value
-                height={660} // Numeric value
+                height={560} // Numeric value
                 style={{
-                  border: "1px solid black",
                   background: "#fff",
                 }}
                 slideBegin={slideBegin}

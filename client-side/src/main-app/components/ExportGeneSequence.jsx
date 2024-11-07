@@ -6,7 +6,7 @@ import { Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
-import FormatAlignCenterOutlinedIcon from "@mui/icons-material/FormatAlignCenterOutlined";
+import { useSelector } from "react-redux";
 import { serverExportGeneSequenceUrl } from "../services/mainAppApiCallConstants";
 
 const validateInputs = (begin, end) => {
@@ -48,6 +48,8 @@ const ExportGeneSequence = () => {
   const [beginIndexValue, setBeginIndexValue] = useState("");
   const [endIndexValue, setEndIndexValue] = useState("");
   const [extractedSeq, setExtractedSeq] = useState("");
+  // const dat = useSelector((state) => state.globalData.currentDataValue);
+  const dat = sessionStorage.getItem("dat");
 
   const getGeneSequenceToExport = async (beginIndexValue, endIndexValue) => {
     console.log(beginIndexValue, endIndexValue);
@@ -55,12 +57,7 @@ const ExportGeneSequence = () => {
     console.log(valid);
     if (valid) {
       try {
-        const url =
-          serverExportGeneSequenceUrl +
-          "?beginIndex=" +
-          beginIndexValue +
-          "&endIndex=" +
-          endIndexValue;
+        const url = `${serverExportGeneSequenceUrl}/params?dat=${dat}&beginIndex=${beginIndexValue}&endIndex=${endIndexValue}`;
         console.log(url);
         const response = await fetch(url);
         console.log(response);

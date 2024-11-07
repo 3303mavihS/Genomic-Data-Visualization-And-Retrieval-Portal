@@ -45,16 +45,9 @@ function downloadTextFile(jsonData) {
   document.body.removeChild(element);
 }
 
-// Example usage:
-const tableData = [
-  ["Name", "Age", "City"],
-  ["Alice", 25, "New York"],
-  ["Bob", 30, "Los Angeles"],
-  ["Charlie", 28, "Chicago"],
-];
-
 const DialogBox = ({ dialogData }) => {
   const openDialogBox = useSelector((state) => state.element.toggleDialogBox);
+  const dat = useSelector((state) => state.globalData.currentDataValue);
   //const dialogData = useSelector((state) => state.globalData.geneData);
   const dispatch = useDispatch();
   // console.log(dialogData);
@@ -71,26 +64,18 @@ const DialogBox = ({ dialogData }) => {
     "End",
     "Strand",
     "NucleotideSeq",
+    "AminoAcidSeq",
     "Label",
     "Type",
-    "Frame",
-    "Length",
-    "Evidence",
-    "Mutation",
     "Gene",
-    "Synonyms",
     "Product",
-    "Class",
-    "ProductType",
-    "Localization",
-    "Roles",
   ];
 
   const handleBtnClick = async (slno) => {
     try {
       //code
       // console.log(slno);
-      const url = serverGetTheGeneDataByNextPrevBtn + "?gene_slno=" + slno;
+      const url = `${serverGetTheGeneDataByNextPrevBtn}/params?dat=${dat}&gene_slno=${slno}`;
       // console.log(url);
       const response = await fetch(url);
       if (response.status === 200) {

@@ -5,6 +5,30 @@ import { uploadedFileUrl } from "../services/serverPathConstants.js";
 
 import { database } from "../app.js";
 
+//standardize the input to make the name have same no. of length and random values
+function standardizeGenomeName(genomeName, desiredLength = 10) {
+  const parts = genomeName.split('_');
+
+  let standardizedName;
+  if (parts.length === 2) {
+    const [organism, feature] = parts;
+    standardizedName = `${organism.toUpperCase()}_${feature.toUpperCase()}`;
+  } else if (parts.length === 1) {
+    standardizedName = parts[0].toUpperCase();
+  } else {
+    return genomeName; // Handle unexpected formats
+  }
+
+  // Add random characters to reach the desired length
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  while (standardizedName.length < desiredLength) {
+    standardizedName += alphabet[Math.floor(Math.random() * alphabet.length)];
+  }
+
+  // Truncate if necessary
+  return standardizedName.slice(0, desiredLength);
+}
+
 /**
  * Upload the data file to the server
  * @param {*} req
@@ -101,89 +125,20 @@ export const readFileContent = async (req, res) => {
   }
 };
 
-// export const saveFileContent = async (req, res) => {
-//   try {
-//     const { param_value, genome_name } = req.body;
-//     const folderPath = path.resolve(uploadedFileUrl, param_value);
-//     console.log(folderPath);
-
-//     // Check if the folder exists
-//     if (!fs.existsSync(folderPath)) {
-//       return res.status(404).json({ error_message: "Folder not found" });
-//     }
-
-//     // Read the contents of the folder to find the CSV file
-//     const files = fs.readdirSync(folderPath);
-//     const csvFile = files.find((file) => path.extname(file) === ".csv");
-
-//     if (!csvFile) {
-//       return res
-//         .status(404)
-//         .json({ error_message: "No CSV file found in the folder" });
-//     }
-
-//     const file_explicit_path = path.join(folderPath, csvFile);
-//     console.log(file_explicit_path);
-
-//     const collection = database.collection(genome_name);
-//     console.log("Client connection with database established.");
-
-//     const results = [];
-//     const colors = [
-//       "#fc5101",
-//       "#a81149",
-//       "#0091cf",
-//       "#d0eb27",
-//       "#fabd00",
-//       "#fe2209",
-//       "#8700b0",
-//       "#0144fe",
-//       "#65b12e",
-//       "#fdfe2f",
-//       "#fb9a00",
-//     ]; // Define your set of colors here
-//     let lastPickedColor = null;
-
-//     fs.createReadStream(file_explicit_path)
-//       .pipe(csv())
-//       .on("data", (row) => {
-//         // Pick a random color that is not the same as the last one
-//         let newColor;
-//         do {
-//           newColor = colors[Math.floor(Math.random() * colors.length)];
-//         } while (newColor === lastPickedColor);
-
-//         // Update last picked color
-//         lastPickedColor = newColor;
-
-//         // Add the color attribute to the row
-//         row.color = newColor;
-
-//         // Push the modified row into the results array
-//         results.push(row);
-//       })
-//       .on("end", async () => {
-//         try {
-//           // Insert data into the collection
-//           await collection.insertMany(results);
-//           console.log("Data saved to database successfully.");
-//           res.status(200).json({ success_message: "Data Saved Successfully" });
-//         } catch (err) {
-//           console.error("Failed to insert data:", err.message);
-//           res.status(500).json({ error_message: "Failed to save data" });
-//         }
-//       });
-//   } catch (err) {
-//     res.status(500).json({ error_message: err.message });
-//   }
-// };
-
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ * save the file content to the database.
+ */
 export const saveFileContent = async (req, res) => {
   try {
     const { param_value, genome_name } = req.body;
     const folderPath = path.resolve(uploadedFileUrl, param_value);
-
-    console.log(folderPath);
+    const collection_name = standardizeGenomeName(genome_name,30);
+    // console.log(collection_name);
+    // console.log(folderPath);
 
     // Check if the folder exists
     if (!fs.existsSync(folderPath)) {
@@ -203,45 +158,42 @@ export const saveFileContent = async (req, res) => {
     const file_explicit_path = path.join(folderPath, csvFile);
     console.log(file_explicit_path);
 
-    const collection = database.collection(genome_name);
+    const collection = database.collection(collection_name);
     console.log("Client connection with database established.");
 
     const results = [];
-    const colorMap = {
-      "CDS": {
-        "+": "#0040ff",
-        "-": "#00bfff"
-      },
-      "fCDS": {
-        "+": "#ff0000",
-        "-": "#ffb3b3"
-      },
-      "misc_RNA": {
-        "+": "#00994d",
-        "-": "#33ff99"
-      },
-      "tRNA": {
-        "+": "#ffc61a",
-        "-": "#fff2cc"
-      },
-      "tmRNA": {
-        "+": "#6600ff",
-        "-": "#d1b3ff"
-      },
-      "rRNA": {
-        "+": "#ffffff",
-        "-": "#ffe6ff"
-      }
-    };
+
+    //color map for the gene type
+    // const colorMap = {
+    //   "CDS": {
+    //     "+": "#00928D",
+    //     "-": "#A7B4E5"
+    //   },
+    //   "tRNA": {
+    //     "+": "#89520B",
+    //     "-": "#F39D2F"
+    //   },
+    //   "tmRNA": {
+    //     "+": "#F8DEA7",
+    //     "-": "#CFD8F7"
+    //   },
+    //   "rRNA": {
+    //     "+": "#E0C07A",
+    //     "-": "#F8DEA7"
+    //   }
+    // };
 
     fs.createReadStream(file_explicit_path)
       .pipe(csv())
       .on("data", (row) => {
-        const type = row.Type;
-        const strand = row.Strand;
+        //these lines add a color attribute to the data
+        // const type = row.Type;
+        // const strand = row.Strand;
 
-        // Assign color based on type and strand
-        row.color = colorMap[type][strand];
+        // // Assign color based on type and strand
+        // row.color = colorMap[type][strand];
+
+        row.Length = parseInt(row.End) - parseInt(row.Begin) + 1;
 
         results.push(row);
       })
@@ -249,7 +201,7 @@ export const saveFileContent = async (req, res) => {
         try {
           await collection.insertMany(results);
           console.log("Data saved to database successfully.");
-          res.status(200).json({ success_message: "Data Saved Successfully" });
+          res.status(200).json({ success_message: "Data Saved Successfully",dat:collection_name });
         } catch (err) {
           console.error("Failed to insert data:", err.message);
           res.status(500).json({ error_message: "Failed to save data" });

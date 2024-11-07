@@ -12,10 +12,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import FormatAlignCenterOutlinedIcon from "@mui/icons-material/FormatAlignCenterOutlined";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import { serverGetResultFromDatabase } from "../services/mainAppApiCallConstants";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setToggleDialogBox } from "../../state-management/feature/elementReducer";
 import { setGeneData } from "../../state-management/feature/dataReducer";
 
@@ -24,6 +23,8 @@ const SearchInGeneData = () => {
   const [keyword, setKeyword] = useState("");
   const [resultData, setResultData] = useState();
   const dispatch = useDispatch();
+  // const dat = useSelector((state) => state.globalData.currentDataValue);
+  const dat = sessionStorage.getItem("dat");
 
   //searchfunction to get the result
   // Function to fetch and display search results based on a keyword
@@ -33,7 +34,7 @@ const SearchInGeneData = () => {
         console.log(`Searching for keyword: ${keyword}`);
 
         // Define the URL with the keyword as a query parameter
-        const url = `${serverGetResultFromDatabase}?keyword=${encodeURIComponent(
+        const url = `${serverGetResultFromDatabase}/params?dat=${dat}&keyword=${encodeURIComponent(
           keyword
         )}`;
         console.log(`Request URL: ${url}`);

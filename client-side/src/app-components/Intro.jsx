@@ -6,8 +6,15 @@ import {
   rastonia_graph_legend,
   rastonia_plasmid,
 } from "../constants";
+import { useDispatch } from "react-redux";
+import {
+  setBreadCrumb,
+  setCurrentDataValue,
+} from "../state-management/feature/dataReducer";
+import { Link } from "react-router-dom";
 
 const Intro = () => {
+  const dispatch = useDispatch();
   return (
     <Box
       component="div"
@@ -62,19 +69,37 @@ const Intro = () => {
               justifyContent: "space-evenly",
             }}
           >
-            <Box component="div" sx={{ cursor: "pointer", width: "40%" }}>
-              <a href="/dashboard/chromosome">
+            <Box
+              component="div"
+              sx={{ cursor: "pointer", width: "40%" }}
+              onClick={() => {
+                // dispatch(setCurrentDataValue("RALSTONIA_CHROMOSOMEtrkikI1R1M"));
+                // dispatch(setBreadCrumb("Chromosome"));
+                sessionStorage.setItem("dat", "RALSTONIA_CHROMOSOMEtrkikI1R1M");
+                sessionStorage.setItem("breadCrumb", "chromosome");
+              }}
+            >
+              <Link to="/dashboard">
                 <img
                   src={rastonia_chromosome}
                   alt=""
                   style={{ width: "100%" }}
                 />
-              </a>
+              </Link>
             </Box>
-            <Box component="div" sx={{ cursor: "pointer", width: "40%" }}>
-              <a href="/dashboard/megaplasmid">
+            <Box
+              component="div"
+              sx={{ cursor: "pointer", width: "40%" }}
+              onClick={() => {
+                // dispatch(setCurrentDataValue("modified_ralstoniagenedetails"));
+                // dispatch(setBreadCrumb("Plasmid"));
+                sessionStorage.setItem("dat", "RALSTONIA_PLASMIDajEm0h1H3Jp1L");
+                sessionStorage.setItem("breadCrumb", "plasmid");
+              }}
+            >
+              <Link to="/dashboard">
                 <img src={rastonia_plasmid} alt="" style={{ width: "100%" }} />
-              </a>
+              </Link>
             </Box>
           </Box>
           <Box component="div" style={{ margin: "0 auto" }}>
