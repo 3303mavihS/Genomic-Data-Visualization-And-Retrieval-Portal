@@ -11,6 +11,7 @@ client-side/node_modules
 server-side/node_modules
 client-side/.env
 server-side/.env
+server-side/data/
 server-side/data/sample/download
 server-side/data/uploads
 genomic_portal
