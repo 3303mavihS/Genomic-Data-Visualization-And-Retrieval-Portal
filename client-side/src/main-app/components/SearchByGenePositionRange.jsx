@@ -67,19 +67,19 @@ const SearchByGenePositionRange = () => {
   const [slideEnd, setSlideEnd] = useState(100000);
   // const dat = useSelector((state) => state.globalData.currentDataValue);
   const dat = sessionStorage.getItem("dat");
-  console.log(dat);
+  //console.log(dat);
 
   const getlastEndPoint = async () => {
     try {
       const url = `${serverGetLastEndPoint}/params?dat=${dat}`;
-      console.log(url);
+      //console.log(url);
       const response = await fetch(url);
       if (response.ok) {
         const data = await response.json();
         setLastPoint(data?.EndPoint);
       }
     } catch (err) {
-      console.log("error_message : ", err.message);
+      console.error("error_message : ", err.message);
     }
   };
 
@@ -90,17 +90,17 @@ const SearchByGenePositionRange = () => {
       try {
         //do the working
         const url = `${serverSearchByGenePositionRangeUrl}/params?dat=${dat}&begin=${begin}&end=${end}`;
-        // console.log(url);
+        // //console.log(url);
         const response = await fetch(url);
         if (response.status === 200) {
           const data = await response.json();
-          console.log(data);
+          //console.log(data);
           setDataRec(data);
           setSlideBegin(data?.range.adjustedBegin + 1);
           setSlideEnd(data?.range.adjustedBegin + 100000);
         }
       } catch (err) {
-        console.log("error_message : ", err.message);
+        console.error("error_message : ", err.message);
       }
     }
   };
@@ -109,12 +109,12 @@ const SearchByGenePositionRange = () => {
   const clickToGoSlide = async (startingRange, key) => {
     const slideRange = 100000;
     setActiveKey(key);
-    console.log("Slide :", key);
+    //console.log("Slide :", key);
     const endParam = key * slideRange + startingRange;
     const beginParam = endParam - slideRange + 1;
     setSlideBegin(beginParam);
     setSlideEnd(endParam);
-    console.log("Begin : ", beginParam, " End : ", endParam);
+    //console.log("Begin : ", beginParam, " End : ", endParam);
     // getGenePositionRange(beginValue, endValue);
     /**
      * Creating url to fetch the data for the current slide
@@ -255,7 +255,7 @@ const SearchByGenePositionRange = () => {
                 label="Strand"
                 onChange={(e) => {
                   setStrandValue(e.target.value);
-                  console.log(e.target.value);
+                  //console.log(e.target.value);
                 }}
               >
                 <MenuItem value={"+"}>+</MenuItem>

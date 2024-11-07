@@ -43,17 +43,17 @@ const SearchByGeneSequence = () => {
         if (response.ok) {
           const data = await response.json();
           setDataRec(data?.geneData);
-          console.log(data?.geneData);
+          //console.log(data?.geneData);
           setDataFound(true);
         } else {
           // Handle non-OK responses (e.g., 404 or 500)
           const data = await response.json();
           setDataRec(data);
-          console.log("Error from server:", data.error_message);
+          ////console.log("Error from server:", data.error_message);
           setDataFound(false);
         }
       } catch (err) {
-        console.log("error_message : ", err.message);
+        console.error("error_message : ", err.message);
       }
     } else {
       alert("Enter the Nucleotide Sequence.");
@@ -127,7 +127,7 @@ const SearchByGeneSequence = () => {
               value={seq}
               onChange={(e) => {
                 setSeq(e.target.value);
-                console.log(e.target.value);
+                //console.log(e.target.value);
               }}
             />
             <Button

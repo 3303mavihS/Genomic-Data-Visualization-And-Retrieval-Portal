@@ -95,8 +95,8 @@ export const returnSearchByGenePositionRange = async (req, res) => {
     const adjustedBegin = Math.floor(begin / 100000) * 100000;
     const adjustedEnd = Math.ceil(end / 100000) * 100000;
 
-    // console.log(`Begin: ${begin}, End: ${end}`);
-    // console.log(
+    // //console.log(`Begin: ${begin}, End: ${end}`);
+    // //console.log(
     //   `Adjusted Begin: ${adjustedBegin}, Adjusted End: ${adjustedEnd}`
     // );
     const {dat} = req.query;
@@ -188,7 +188,7 @@ export const returnGeneBySeq = async (req, res) => {
   try {
     //code
     const { gene_seq } = req.body;
-    // console.log(gene_seq);
+    // //console.log(gene_seq);
     if (!gene_seq) {
       return res.status(400).json({ error_message: "gene_seq is required" });
     }
@@ -226,7 +226,7 @@ export const returnGeneByLength = async (req, res) => {
     }
 
     // Log the received lengths for debugging
-    // console.log(
+    // //console.log(
     //   "Received min and max length: ",
     //   gene_min_length,
     //   gene_max_length
@@ -286,27 +286,30 @@ export const returnGeneByLength = async (req, res) => {
       lastDocumentEndValue: endValue,
     });
   } catch (err) {
-    console.log(err.message);
+    //console.log(err.message);
     res.status(500).json({ error_message: err.message });
   }
 };
 
 //export the gene sequence based on start and end index
 export const exportGeneSequence = async (req,res)=>{
-  const { beginIndex, endIndex } = req.query;
-  // console.log(beginIndex,endIndex);
-  const begin = parseInt(beginIndex);
-  const end = parseInt(endIndex)+1;
-
+  const { beginIndex, endIndex,dat } = req.query;
   // Check if indices are provided and are valid numbers
   if (!beginIndex || !endIndex || isNaN(beginIndex) || isNaN(endIndex)) {
     return res.status(400).send("Invalid indices provided.");
   }
+  // //console.log(beginIndex,endIndex);
+  const begin = parseInt(beginIndex)-1;
+  const end = parseInt(endIndex);
+  
+  if (begin < 0) {
+    begin = 0;
+}
 
   try {
     // Step 1: Read the sequence from the local file
-    const filePath = path.join(__dirname, "../data/export/genome/ras_bact_gene_sequence_text.txt");
-    console.log(filePath);
+    const filePath = path.join(__dirname, "../data/export/genome/"+dat+".txt");
+    //console.log(filePath);
     const fullSequence = fs.readFileSync(filePath, "utf8");
 
     // Step 2: Extract the substring based on provided indices
@@ -315,18 +318,16 @@ export const exportGeneSequence = async (req,res)=>{
       end
     );
 
-    
-
     // Break the sequence into 16-character lines
-const lines = [];
-let i = 0;
-while (i < sequencePart.length) {
-  lines.push(sequencePart.substring(i, i + 50));
-  i += 50;
-}
+    const lines = [];
+    let i = 0;
+    while (i < sequencePart.length) {
+      lines.push(sequencePart.substring(i, i + 50));
+      i += 50;
+    }
 
-// Join the lines with newline characters
-const formattedSequence = lines.join('\n');
+    // Join the lines with newline characters
+    const formattedSequence = lines.join('\n');
 
     const file_content = ">ralstonia:"+beginIndex+":"+endIndex+":- len="+(end-begin)+"\n"+formattedSequence;
 
@@ -337,13 +338,13 @@ const formattedSequence = lines.join('\n');
     // Step 4: Send the file as a download
     res.download(tempFilePath, "extracted_sequence.txt", (err) => {
       if (err) {
-        console.log("Error downloading file:", err);
+        //console.log("Error downloading file:", err);
       }
       // Delete the temporary file after sending it
       fs.unlinkSync(tempFilePath);
     });
   }catch (err) {
-    console.log(err.message);
+    //console.log(err.message);
     res.status(500).json({ error_message: err.message });
   }
 
@@ -357,7 +358,7 @@ export const returnSearchInGeneData = async (req, res) => {
     // Access the collection
     // const collection = database.collection("modified_ralstoniagenedetails");
     const { keyword,dat } = req.query;
-  // console.log(`Searching for keyword: ${keyword}`);
+  // //console.log(`Searching for keyword: ${keyword}`);
     //console.log(dat);
     const collection = database.collection(dat);
 
@@ -371,9 +372,9 @@ export const returnSearchInGeneData = async (req, res) => {
     }).toArray();
 
     // If no results found, return a 404
-    if (searchResult.length === 0) {
-      return res.status(404).json({ error_message: "No matching gene data found" });
-    }
+    // if (searchResult.length === 0) {
+    //   return res.status(404).json({ error_message: "No matching gene data found" });
+    // }
 
     // Map each document in searchResult to include the fields that contain the keyword
     const resultWithMatchedFields = searchResult.map((doc) => {
@@ -381,7 +382,7 @@ export const returnSearchInGeneData = async (req, res) => {
       const matchedFields = {};
 
       // Check each field and add it to matchedFields if it contains the keyword
-      ["Type", "Gene", "Synonyms", "Product", "Class", "ProductType", "Localization", "Roles"].forEach((field) => {
+      ["Type","Label", "Gene", "Product"].forEach((field) => {
         if (doc[field] && new RegExp(keyword, "i").test(doc[field])) {
           matchedFields[field] = doc[field];
         }
@@ -396,7 +397,7 @@ export const returnSearchInGeneData = async (req, res) => {
     // Return the search result with matched fields in the response
     res.status(200).json({ data: resultWithMatchedFields });
   } catch (err) {
-    console.log("Error:", err.message);
+    //console.log("Error:", err.message);
     res.status(500).json({ error_message: err.message });
   }
 };

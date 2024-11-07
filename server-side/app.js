@@ -24,8 +24,8 @@ dotenv.config();
 //file path constants
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-console.log(__filename);
-console.log(__dirname);
+// console.log(__filename);
+// console.log(__dirname);
 //express app using other dependencies and libraries
 const app = express();
 app.use(express.json());
@@ -36,6 +36,9 @@ app.use(bodyParser.json({ limit: "32mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "32mb", extended: true }));
 app.use(cors());
 
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'dist')));
 //we do not need to make any folder to serve them as static folder
 //only the sample file can be served as static folder to let users download
 //the data sample
@@ -43,10 +46,7 @@ app.use(
   "/data/sample/download",
   express.static(path.join(__dirname, "data/sample/download"))
 );
-//server the dist folder to serve the folder in client side
-// app.use(express.static(path.join(__dirname,"../client-side/dist")));
-// app.get("*",(req,res)=>{res.sendFile(path.join(__dirname,"../client-side/dist","index.html"))});
-console.log(path.join(__dirname,"../client-side"));
+
 
 /**
  * storing the files
@@ -93,7 +93,7 @@ const fileUpload = multer({
       path.extname(file.originalname).toLowerCase()
     );
 
-    console.log({ mimetype, extname }); // Debug log
+    // console.log({ mimetype, extname }); // Debug log
 
     if (mimetype && extname) {
       return cb(null, true);
@@ -116,6 +116,11 @@ app.post(
 app.use("/add-new-genome-data", addNewGenomeDataRoutes);
 //route has not been decided yet so just in test phase to implement the features
 app.use("/data", dashboardRoutes);
+//now all the remaining routes can return the frontend part so always use it at last 
+// Handle React routing, return all requests to the React app
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
 
 /**
  * connection with database initiated on server start instead of

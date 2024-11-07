@@ -30,7 +30,7 @@ const Laboratories = () => {
           Associate Laboratories
         </Typography> */}
         <Typography variant="p" sx={{ fontSize: "20px", fontWeight: "500" }}>
-          List of our associate laboratories.
+          List of our associated laboratories.
         </Typography>
         <hr style={{ width: "100%" }} />
         <Box

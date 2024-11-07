@@ -4,8 +4,9 @@
 
 
 //backend main url
-// const mainDomain = "http://192.168.3.158:5174";
-const mainDomain = "http://localhost:5174";
+const mainDomain = "http://192.168.3.158:5174";
+// const mainDomain = "http://localhost:5174";
+
 
 
 //url for upload files on server

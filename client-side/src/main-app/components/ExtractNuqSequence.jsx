@@ -43,7 +43,7 @@ const validateInputs = (begin, end) => {
   return true;
 };
 
-const ExportGeneSequence = () => {
+const ExtractNuqSequence = () => {
   const ref = useRef(null);
   const [beginIndexValue, setBeginIndexValue] = useState("");
   const [endIndexValue, setEndIndexValue] = useState("");
@@ -52,19 +52,19 @@ const ExportGeneSequence = () => {
   const dat = sessionStorage.getItem("dat");
 
   const getGeneSequenceToExport = async (beginIndexValue, endIndexValue) => {
-    console.log(beginIndexValue, endIndexValue);
+    //console.log(beginIndexValue, endIndexValue);
     const valid = validateInputs(beginIndexValue, endIndexValue);
-    console.log(valid);
+    //console.log(valid);
     if (valid) {
       try {
         const url = `${serverExportGeneSequenceUrl}/params?dat=${dat}&beginIndex=${beginIndexValue}&endIndex=${endIndexValue}`;
-        console.log(url);
+        //console.log(url);
         const response = await fetch(url);
-        console.log(response);
+        //console.log(response);
         if (response.ok) {
           const textContent = await response.text(); // Read the text content
           setExtractedSeq(textContent); // Set the extracted sequence for display
-          console.log("Extracted sequence:", textContent);
+          //console.log("Extracted sequence:", textContent);
 
           // Optional: Prompt user to download before creating the link
           if (window.confirm("Sequence retrieved. Download?")) {
@@ -78,10 +78,10 @@ const ExportGeneSequence = () => {
             link.remove();
           }
         } else {
-          console.log("Failed to download sequence:", response.statusText);
+          //console.log("Failed to download sequence:", response.statusText);
         }
       } catch (err) {
-        console.log("error_message : ", err.message);
+        console.error("error_message : ", err.message);
       }
     }
   };
@@ -112,11 +112,11 @@ const ExportGeneSequence = () => {
                 variant="h1"
                 sx={{ fontSize: "32px", fontWeight: "700" }}
               >
-                Export Gene Sequence
+                Extract Nucleotide Sequence
               </Typography>
 
               <Typography variant="body1" sx={{ mt: 2 }} gutterBottom>
-                Extract and export a gene sequence based on custom start and end
+                Extract nucleotide sequence based on custom start and end
                 points, allowing flexible data access for external analysis or
                 reporting.
               </Typography>
@@ -142,7 +142,7 @@ const ExportGeneSequence = () => {
               value={beginIndexValue}
               onChange={(e) => {
                 setBeginIndexValue(e.target.value);
-                console.log(e.target.value);
+                //console.log(e.target.value);
               }}
             />
             <TextField
@@ -154,7 +154,7 @@ const ExportGeneSequence = () => {
               value={endIndexValue}
               onChange={(e) => {
                 setEndIndexValue(e.target.value);
-                console.log(e.target.value);
+                //console.log(e.target.value);
               }}
             />
             <Button
@@ -179,4 +179,4 @@ const ExportGeneSequence = () => {
   );
 };
 
-export default ExportGeneSequence;
+export default ExtractNuqSequence;

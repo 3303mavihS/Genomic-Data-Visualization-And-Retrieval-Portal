@@ -37,7 +37,7 @@ const Home = () => {
           <Routes>
             <Route path="/" element={<Intro />} />
             <Route path="/intro" element={<Intro />} />
-            <Route path="/associate-laboratories" element={<Laboratories />} />
+            <Route path="/associated-laboratories" element={<Laboratories />} />
           </Routes>
         </Box>
       </Box>

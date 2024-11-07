@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { serverGetTheGeneData } from "../../../services/mainAppApiCallConstants";
 import { useDispatch } from "react-redux";
 import { setToggleDialogBox } from "../../../../state-management/feature/elementReducer";
-import { setGeneData } from "../../../../state-management/feature/dataReducer";
+import { setDialogGeneData, setGeneData } from "../../../../state-management/feature/dataReducer";
 
 
 // Helper function to format numbers (e.g., 10000 -> 10k, 56400 -> 56.4k)
@@ -363,7 +363,7 @@ const useCanvas = (props) => {
         element.Begin <= lineBeginParameter &&
         elementEnd >= lineBeginParameter
       ) {
-        // console.log(
+        // //console.log(
         //   "Previous Remaining Box : ",
         //   element.Begin,
         //   elementEnd,
@@ -396,7 +396,7 @@ const useCanvas = (props) => {
         element.Begin <= lineEndParameter &&
         elementEnd <= lineEndParameter
       ) {
-        // console.log(
+        // //console.log(
         //   "Normal Box Line-Begin : ",
         //   lineBeginParameter," Line-End : ",
         //   lineEndParameter," Rect-Begin : ",
@@ -433,7 +433,7 @@ const useCanvas = (props) => {
         elementEnd >= lineEndParameter
       ) {
         //console.log("Box on two lines starts here");
-        // console.log(
+        // //console.log(
         //   "Box on current line Begin : ",
         //     element.Begin," End : ",
         //     elementEnd,"Label : ",
@@ -468,7 +468,7 @@ const useCanvas = (props) => {
           lineEndParameter = lineEndParameter + pageRange;
           yValue = gap * row;
           //console.log("New Row :", row," Line Begin : ", lineBeginParameter," Line End : ", lineEndParameter,"New Y-coordinate : ", yValue);
-          // console.log(
+          // //console.log(
           //   "Remaining Box Begin : ",
           //   element.Begin," End : ",
           //   elementEnd,"Label : ",
@@ -547,10 +547,10 @@ const useCanvas = (props) => {
               const data = await response.json();
               //console.log(data);
               dispatch(setToggleDialogBox(true));
-              dispatch(setGeneData(data));
+              dispatch(setDialogGeneData(data));
             }
           } catch (err) {
-            console.log("error_message : ", err.message);
+            //console.log("error_message : ", err.message);
           }
         }
       });

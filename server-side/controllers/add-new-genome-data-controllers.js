@@ -156,10 +156,10 @@ export const saveFileContent = async (req, res) => {
     }
 
     const file_explicit_path = path.join(folderPath, csvFile);
-    console.log(file_explicit_path);
+    // console.log(file_explicit_path);
 
     const collection = database.collection(collection_name);
-    console.log("Client connection with database established.");
+    //console.log("Client connection with database established.");
 
     const results = [];
 
@@ -200,7 +200,7 @@ export const saveFileContent = async (req, res) => {
       .on("end", async () => {
         try {
           await collection.insertMany(results);
-          console.log("Data saved to database successfully.");
+          //console.log("Data saved to database successfully.");
           res.status(200).json({ success_message: "Data Saved Successfully",dat:collection_name });
         } catch (err) {
           console.error("Failed to insert data:", err.message);

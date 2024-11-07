@@ -42,7 +42,7 @@ const Intro = () => {
             <Typography variant="body1" sx={{ textAlign: "justify" }}>
               Ralstonia solanacearum is a gram-negative, proteobacterium that is
               the causative agent of wilt, which is one of the most severe
-              vascular plant diseases in the world, infects more than plant
+              vascular plant diseases in the world, infects more than 450 plant
               species. This bacterium has a high level of phenotypic and
               genotypic diversity and has a wide host range with huge geographic
               distribution. R. solanacearum can survive in soils or in water for
@@ -50,11 +50,7 @@ const Intro = () => {
               roots, colonizes their root cortex, invades the xylem vessels, and
               then colonize and block the entire vascular system. This portal
               presents the genome annotation of a recently isolated novel strain
-              Ralstonia solanacearum F1C1 from Tezpur locality , more than 450
-              plant species.{" "}
-              <a href="/associate-laboratories" style={{ color: "blue" }}>
-                [associate laboratories]
-              </a>
+              Ralstonia solanacearum F1C1 from Tezpur locality.{" "}
             </Typography>
           </Box>
           <Box
@@ -71,7 +67,7 @@ const Intro = () => {
           >
             <Box
               component="div"
-              sx={{ cursor: "pointer", width: "40%" }}
+              sx={{ cursor: "pointer", width: "35%" }}
               onClick={() => {
                 // dispatch(setCurrentDataValue("RALSTONIA_CHROMOSOMEtrkikI1R1M"));
                 // dispatch(setBreadCrumb("Chromosome"));
@@ -89,7 +85,7 @@ const Intro = () => {
             </Box>
             <Box
               component="div"
-              sx={{ cursor: "pointer", width: "40%" }}
+              sx={{ cursor: "pointer", width: "35%" }}
               onClick={() => {
                 // dispatch(setCurrentDataValue("modified_ralstoniagenedetails"));
                 // dispatch(setBreadCrumb("Plasmid"));
@@ -109,9 +105,15 @@ const Intro = () => {
               style={{ width: "350px" }}
             />
           </Box>
+          <a
+            href="/associated-laboratories"
+            style={{ color: "blue", fontWeight: "bold", marginTop: "-20px" }}
+          >
+            [associated laboratories]
+          </a>
         </Box>
       </Box>
-      <Box component="div" className="isolation_div" style={{ width: "20%" }}>
+      <Box component="div" className="isolation_div" style={{ width: "19%" }}>
         <Box
           component="div"
           style={{

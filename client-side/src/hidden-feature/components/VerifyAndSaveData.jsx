@@ -102,7 +102,7 @@ const VerifyAndSaveData = ({ fileContent }) => {
     setSavingProgress(true); // Start progress when the button is clicked
     setProgress(10); // Start progress at 10%
     try {
-      console.log("Data getting saved to Database.");
+      //console.log("Data getting saved to Database.");
       const param_value = fileContent?.param_value;
       const genome_name = genomeName.toLowerCase().replace(/\s+/g, "");
 
@@ -120,7 +120,7 @@ const VerifyAndSaveData = ({ fileContent }) => {
       });
       if (response.status === 200) {
         const data = await response.json();
-        console.log(data.dat);
+        //console.log(data.dat);
         setDat(data.dat);
         // Simulate progress
         for (let i = 20; i <= 100; i += 5) {
@@ -136,7 +136,7 @@ const VerifyAndSaveData = ({ fileContent }) => {
         alert("Failed to save data.");
       }
     } catch (err) {
-      console.log("error_message : ", err.message);
+      console.error("error_message : ", err.message);
     }
   };
   return (

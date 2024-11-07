@@ -8,11 +8,11 @@ import SearchByGenePositionRange from "../main-app/components/SearchByGenePositi
 import SearchByGeneSize from "../main-app/components/SearchByGeneSize";
 import SearchByGeneSequence from "../main-app/components/SearchByGeneSequence";
 import { useSelector } from "react-redux";
-import ExportGeneSequence from "../main-app/components/ExportGeneSequence";
+import ExportGeneSequence from "../main-app/components/ExtractNuqSequence";
 import SearchInGeneData from "../main-app/components/SearchInGeneData";
 
 const MainBody = ({ component, sx }) => {
-  const dialogData = useSelector((state) => state.globalData.geneData);
+  const dialogData = useSelector((state) => state.globalData.dialogGeneData);
 
   // console.log(dialogData);
   return (
@@ -32,7 +32,10 @@ const MainBody = ({ component, sx }) => {
           path="search-in-position-range"
           element={<SearchByGenePositionRange />}
         />
-        <Route path="export-gene-sequence" element={<ExportGeneSequence />} />
+        <Route
+          path="extract-nucleotide-sequence"
+          element={<ExportGeneSequence />}
+        />
       </Routes>
     </Box>
   );

@@ -50,7 +50,7 @@ const UploadFile = ({ setData }) => {
       //check the response to proceed accordingly
       if (response.status === 200) {
         const rec_data = await response.json();
-        console.log(rec_data);
+        //console.log(rec_data);
         setSelectedFile(null);
         setResponseRec(rec_data);
       }
@@ -65,7 +65,7 @@ const UploadFile = ({ setData }) => {
         //sending folder name as params
         const folder_name = responseRec.uploadedFileName.split("/")[0];
         const url_to_hit = serverReadfileUrl + "/" + folder_name;
-        console.log(url_to_hit);
+        //console.log(url_to_hit);
 
         const response = await fetch(url_to_hit, {
           method: "GET", //trying to get the response from the server
@@ -74,11 +74,11 @@ const UploadFile = ({ setData }) => {
         if (response.status === 200) {
           const data = await response.json();
           setFileContent(data);
-          console.log(data);
+          //console.log(data);
           setData(data);
         } else {
           const data = await response.json();
-          console.log(data);
+          //console.log(data);
         }
       }
     } catch (err) {

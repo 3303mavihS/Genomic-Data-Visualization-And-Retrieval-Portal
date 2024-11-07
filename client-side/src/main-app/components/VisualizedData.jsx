@@ -26,21 +26,21 @@ const VisualizedData = () => {
   const [slideBegin, setSlideBegin] = useState(1);
   const [slideEnd, setSlideEnd] = useState(100000);
   // const dat = useSelector((state) => state.globalData.currentDataValue);
-  const bread = useSelector((state) => state.globalData.breadCrumb);
+  const bread = sessionStorage.getItem("breadCrumb");
   const dat = sessionStorage.getItem("dat");
-  console.log(dat);
+  // console.log(dat);
 
   const getlastEndPoint = async () => {
     try {
       const url = `${serverGetLastEndPoint}/params?dat=${dat}`;
-      console.log(url);
+      //console.log(url);
       const response = await fetch(url);
       if (response.ok) {
         const data = await response.json();
         setLastPoint(data?.EndPoint);
       }
     } catch (err) {
-      console.log("error_message : ", err.message);
+      console.error("error_message : ", err.message);
     }
   };
 
@@ -62,7 +62,7 @@ const VisualizedData = () => {
      * passign parameters and slide no.
      */
     const url = `${serverSlideUrl}/${key}/params?dat=${dat}&begin=${beginParam}&end=${endParam}`;
-    console.log("Url : ", url);
+    // console.log("Url : ", url);
 
     try {
       const response = await fetch(url);
@@ -72,7 +72,7 @@ const VisualizedData = () => {
         setDataRec(data);
       }
     } catch (err) {
-      console.log("error_message : ", err.message);
+      console.error("error_message : ", err.message);
     }
   };
 

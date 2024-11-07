@@ -4,6 +4,8 @@ const initialState = {
   currentDataValue:"",
   breadCrumb:"",
   geneData: "",
+  searchKeyword:"",
+  dialogGeneData:"",
 };
 
 const dataSlice = createSlice({
@@ -19,8 +21,14 @@ const dataSlice = createSlice({
     setGeneData: (state, { payload }) => {
       state.geneData = payload;
     },
+    setSearchKeyword: (state, { payload }) => {
+      state.searchKeyword = payload;
+    },
+    setDialogGeneData: (state, { payload }) => {
+      state.dialogGeneData = payload;
+    },
   },
 });
 
-export const { setCurrentDataValue,setBreadCrumb,setGeneData } = dataSlice.actions;
+export const { setCurrentDataValue,setBreadCrumb,setGeneData,setSearchKeyword,setDialogGeneData } = dataSlice.actions;
 export default dataSlice.reducer;

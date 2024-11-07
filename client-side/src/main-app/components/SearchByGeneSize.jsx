@@ -62,26 +62,20 @@ const SearchByGeneSize = () => {
   const [slideBegin, setSlideBegin] = useState(1);
   const [slideEnd, setSlideEnd] = useState(100000);
   const [lastPoint, setLastPoint] = useState();
-  const dat = useSelector((state) => state.globalData.currentDataValue);
+  // const dat = useSelector((state) => state.globalData.currentDataValue);
+  const dat = sessionStorage.getItem("dat");
 
   const getLengthRangeData = async (min, max) => {
     const valid = validateInputs(min, max);
     if (valid) {
       try {
         //do the working
-        const url =
-          serverGetLengthRangeDataUrl +
-          "/params?dat=" +
-          dat +
-          "&gene_min_length=" +
-          minLength +
-          "&gene_max_length=" +
-          maxLength;
-        console.log(url);
+        const url = `${serverGetLengthRangeDataUrl}/params?dat=${dat}&gene_min_length=${minLength}&gene_max_length=${maxLength}`;
+        //console.log(url);
         const response = await fetch(url);
         if (response.status === 200) {
           const data = await response.json();
-          console.log(data);
+          //console.log(data);
           setDataRec(data);
           // setSlideBegin(data?.range.adjustedBegin + 1);
           // setSlideEnd(data?.range.adjustedBegin + 100000);
@@ -90,7 +84,7 @@ const SearchByGeneSize = () => {
           setLastPoint(data?.lastDocumentEndValue);
         }
       } catch (err) {
-        console.log("error_message : ", err.message);
+        console.error("error_message : ", err.message);
       }
     }
   };
@@ -99,12 +93,12 @@ const SearchByGeneSize = () => {
   const clickToGoSlide = async (key) => {
     const slideRange = 100000;
     setActiveKey(key);
-    console.log("Slide :", key);
+    //console.log("Slide :", key);
     const endParam = key * slideRange;
     const beginParam = endParam - slideRange + 1;
     setSlideBegin(beginParam);
     setSlideEnd(endParam);
-    console.log("Begin : ", beginParam, " End : ", endParam);
+    //console.log("Begin : ", beginParam, " End : ", endParam);
   };
 
   useEffect(() => {
@@ -185,7 +179,7 @@ const SearchByGeneSize = () => {
               value={minLength}
               onChange={(e) => {
                 setMinLength(e.target.value);
-                console.log(e.target.value);
+                //console.log(e.target.value);
               }}
             />
             <TextField
@@ -197,7 +191,7 @@ const SearchByGeneSize = () => {
               value={maxLength}
               onChange={(e) => {
                 setMaxLength(e.target.value);
-                console.log(e.target.value);
+                //console.log(e.target.value);
               }}
             />
             <FormControl sx={{ width: "100px" }}>
@@ -209,7 +203,7 @@ const SearchByGeneSize = () => {
                 label="Strand"
                 onChange={(e) => {
                   setStrandValue(e.target.value);
-                  console.log(e.target.value);
+                  //console.log(e.target.value);
                 }}
               >
                 <MenuItem value={"+"}>+</MenuItem>

@@ -84,7 +84,7 @@ const DialogBox = ({ dialogData }) => {
         dispatch(setGeneData(data));
       }
     } catch (err) {
-      console.log("error_message : ", err.message);
+      console.error("error_message : ", err.message);
     }
   };
 

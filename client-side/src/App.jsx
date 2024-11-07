@@ -9,7 +9,7 @@ import SearchInGeneData from "./main-app/components/SearchInGeneData.jsx";
 import SearchByGeneSize from "./main-app/components/SearchByGeneSize.jsx";
 import SearchByGeneSequence from "./main-app/components/SearchByGeneSequence.jsx";
 import SearchByGenePositionRange from "./main-app/components/SearchByGenePositionRange.jsx";
-import ExportGeneSequence from "./main-app/components/ExportGeneSequence.jsx";
+import ExportGeneSequence from "./main-app/components/ExtractNuqSequence.jsx";
 import AddData from "./hidden-feature/components/AddData.jsx";
 import Intro from "./app-components/Intro.jsx";
 import Laboratories from "./app-components/Laboratories.jsx";
@@ -47,7 +47,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />}>
             <Route path="intro" element={<Intro />} />
-            <Route path="associate-laboratories" element={<Laboratories />} />
+            <Route path="associated-laboratories" element={<Laboratories />} />
           </Route>
           <Route path="/dashboard" element={<Dashboard />}>
             <Route path="search-in-gene-data" element={<SearchInGeneData />} />
@@ -61,7 +61,7 @@ const App = () => {
               element={<SearchByGenePositionRange />}
             />
             <Route
-              path="export-gene-sequence"
+              path="extract-nucleotide-sequence"
               element={<ExportGeneSequence />}
             />
           </Route>

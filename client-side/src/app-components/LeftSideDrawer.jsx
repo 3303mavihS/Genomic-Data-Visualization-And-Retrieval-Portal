@@ -49,7 +49,7 @@ const LeftSideDrawer = ({ variant, sx }) => {
             </ListItemButton>
           </NavLink>
 
-          <NavLink to={`/dashboard/search-in-gene-data`}>
+          {/* <NavLink to={`/dashboard/search-in-gene-data`}>
             <ListItemButton
               selected={selectedButtonKey === 2}
               onClick={() => handleListButtonClick(2)}
@@ -59,7 +59,7 @@ const LeftSideDrawer = ({ variant, sx }) => {
               </ListItemIcon>
               <ListItemText primary="Search In Gene Data" />
             </ListItemButton>
-          </NavLink>
+          </NavLink> */}
 
           <NavLink to={`/dashboard/search-by-nucleotide-seq`}>
             <ListItemButton
@@ -97,7 +97,7 @@ const LeftSideDrawer = ({ variant, sx }) => {
             </ListItemButton>
           </NavLink>
 
-          <NavLink to={`/dashboard/export-gene-sequence`}>
+          <NavLink to={`/dashboard/extract-nucleotide-sequence`}>
             <ListItemButton
               selected={selectedButtonKey === 6}
               onClick={() => handleListButtonClick(6)}
@@ -105,7 +105,7 @@ const LeftSideDrawer = ({ variant, sx }) => {
               <ListItemIcon>
                 <ExitToAppIcon />
               </ListItemIcon>
-              <ListItemText primary="Export Gene Sequence" />
+              <ListItemText primary="Extract Nucleotide Sequence" />
             </ListItemButton>
           </NavLink>
         </List>
