@@ -1,13 +1,13 @@
 /**
  * url prefixes
  */
-
-
+console.log(`${window.location.protocol}//${window.location.host}`);
 //backend main url
-const mainDomain = "http://192.168.3.158:5174";
-// const mainDomain = "http://localhost:5174";
+// const mainDomain = "http://192.168.3.158:5173";
+const mainDomain = "http://localhost:5174";
 
-
+//make it live for production and deployement
+// const mainDomain = `${window.location.protocol}//${window.location.host}`;
 
 //url for upload files on server
 export const serverGetGenomeDataTest = mainDomain + "/data/genome-data";
@@ -19,7 +19,8 @@ export const serverGetLastEndPoint = mainDomain + "/data/calculate-slides";
 export const serverSlideUrl = mainDomain + "/data/slide";
 
 //url to get the range data with the Begin and End Point for the whole canvas
-export const serverSearchByGenePositionRangeUrl = mainDomain + "/data/get-range-data";
+export const serverSearchByGenePositionRangeUrl =
+  mainDomain + "/data/get-range-data";
 
 //url to get the data between a length a range
 export const serverGetLengthRangeDataUrl =
@@ -37,7 +38,13 @@ export const serverGetTheGeneDataByNucSeq =
   mainDomain + "/data/get-gene-data-by-seq";
 
 //url to get the gene sequence from the database as the file
-export const serverExportGeneSequenceUrl = mainDomain + "/data/export-gene-sequence";
+export const serverExportGeneSequenceUrl =
+  mainDomain + "/data/export-gene-sequence";
 
 //url to get the result based on the keyword sent to the as the query in request.
-export const serverGetResultFromDatabase = mainDomain + "/data/get-keyword-result";
+export const serverGetResultFromDatabase =
+  mainDomain + "/data/get-keyword-result";
+
+//url to get the total length from the file
+export const serverGetTotalLengthOfFile =
+  mainDomain + "/data/get-total-length/params";

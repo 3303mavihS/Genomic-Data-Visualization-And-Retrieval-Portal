@@ -11,7 +11,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import { serverSampleFileDownloadUrl } from "../services/apiCallConstants";
 import VerifyAndSaveData from "./VerifyAndSaveData";
 
-const AddData = () => {
+const AddNewGenomeToDatabase = () => {
   const [fileContentRec, setFileContentRec] = useState(null);
   const setDataFromChild = (data) => {
     setFileContentRec(data);
@@ -31,7 +31,7 @@ const AddData = () => {
               component="div"
               sx={{ display: { xs: "none", sm: "block" } }}
             >
-              Upload New Data
+              Upload Data
             </Typography>
             <Box sx={{ flexGrow: 1 }} />
           </Toolbar>
@@ -50,7 +50,7 @@ const AddData = () => {
               variant="h2"
               sx={{ fontSize: "32px", fontWeight: "700" }}
             >
-              Add New Genome Data
+              Upload New Genome Data
             </Typography>
             <Breadcrumbs
               aria-label="breadcrumb"
@@ -101,4 +101,4 @@ const AddData = () => {
   );
 };
 
-export default AddData;
+export default AddNewGenomeToDatabase;

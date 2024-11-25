@@ -2,12 +2,12 @@ import fs from "fs";
 import path from "path";
 import csv from "csv-parser";
 import { uploadedFileUrl } from "../services/serverPathConstants.js";
-
 import { database } from "../app.js";
+import { __filename, __dirname } from "../app.js";
 
 //standardize the input to make the name have same no. of length and random values
 function standardizeGenomeName(genomeName, desiredLength = 10) {
-  const parts = genomeName.split('_');
+  const parts = genomeName.split("_");
 
   let standardizedName;
   if (parts.length === 2) {
@@ -20,13 +20,27 @@ function standardizeGenomeName(genomeName, desiredLength = 10) {
   }
 
   // Add random characters to reach the desired length
-  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const alphabet =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   while (standardizedName.length < desiredLength) {
     standardizedName += alphabet[Math.floor(Math.random() * alphabet.length)];
   }
 
   // Truncate if necessary
   return standardizedName.slice(0, desiredLength);
+}
+//remove the whitespaces from the fasta file that we have uploaded
+function removeWhitespace(filePath) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(filePath, "utf8", (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        const cleanedData = data.replace(/[\s\n]+/g, "");
+        resolve(cleanedData);
+      }
+    });
+  });
 }
 
 /**
@@ -48,6 +62,63 @@ export const uploadDataFile = async (req, res) => {
     }
   } catch (err) {
     console.error(err.message);
+    res.status(500).json({ error_message: err.message });
+  }
+};
+
+/**
+ * Upload the fasta file to the server
+ * @param {*} req
+ * @param {*} res
+ * @returns
+ */
+export const uploadFastaFile = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error_message: "No file uploaded" });
+    }
+    // Directory and file paths
+    const uploadDir = path.join(__dirname, "/data/export/genome");
+    const originalFilePath = path.join(uploadDir, req.file.filename);
+    const customFilename =
+      `${req.body.customFileName}.txt` || `file-${Date.now()}.txt`;
+    const customFilePath = path.join(uploadDir, customFilename);
+    // console.log("Renaming file:", originalFilePath, "to:", customFilePath);
+
+    // Rename the file
+    fs.rename(originalFilePath, customFilePath, (err) => {
+      if (err) {
+        console.error("Error renaming file:", err.message);
+        return res.status(500).json({
+          error_message: "Failed to rename the file",
+        });
+      }
+    });
+
+    //remove the whitespaces from the file
+    removeWhitespace(customFilePath)
+      .then((cleanedData) => {
+        // Write the cleaned data to a new file or process it further
+        fs.writeFile(customFilePath, cleanedData, (err) => {
+          if (err) {
+            console.error("Error writing file:", err);
+          } else {
+            console.log("Whitespace removed successfully!");
+          }
+        });
+      })
+      .catch((err) => {
+        console.error("Error reading file:", err);
+      });
+
+    // Respond with success
+    res.status(200).json({
+      message: "File uploaded and renamed successfully",
+      filename: customFilename,
+      path: `/data/export/genome/${customFilename}`,
+    });
+  } catch (err) {
+    console.error("Server error:", err.message);
     res.status(500).json({ error_message: err.message });
   }
 };
@@ -126,17 +197,17 @@ export const readFileContent = async (req, res) => {
 };
 
 /**
- * 
- * @param {*} req 
- * @param {*} res 
- * @returns 
+ *
+ * @param {*} req
+ * @param {*} res
+ * @returns
  * save the file content to the database.
  */
 export const saveFileContent = async (req, res) => {
   try {
     const { param_value, genome_name } = req.body;
     const folderPath = path.resolve(uploadedFileUrl, param_value);
-    const collection_name = standardizeGenomeName(genome_name,30);
+    const collection_name = standardizeGenomeName(genome_name, 30);
     // console.log(collection_name);
     // console.log(folderPath);
 
@@ -201,13 +272,30 @@ export const saveFileContent = async (req, res) => {
         try {
           await collection.insertMany(results);
           //console.log("Data saved to database successfully.");
-          res.status(200).json({ success_message: "Data Saved Successfully",dat:collection_name });
+          res.status(200).json({
+            success_message: "Data Saved Successfully",
+            dat: collection_name,
+          });
         } catch (err) {
           console.error("Failed to insert data:", err.message);
           res.status(500).json({ error_message: "Failed to save data" });
         }
       });
   } catch (err) {
+    res.status(500).json({ error_message: err.message });
+  }
+};
+
+//get a list of collections present in our database
+export const getListOfCollectionsInDatabase = async (req, res) => {
+  try {
+    const collections = await database.listCollections().toArray();
+    collections.forEach((collection) => {
+      console.log(collection.name);
+    });
+    res.status(200).json(collections);
+  } catch (err) {
+    console.error(err.message);
     res.status(500).json({ error_message: err.message });
   }
 };

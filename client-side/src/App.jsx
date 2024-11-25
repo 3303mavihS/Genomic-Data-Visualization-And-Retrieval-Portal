@@ -10,12 +10,15 @@ import SearchByGeneSize from "./main-app/components/SearchByGeneSize.jsx";
 import SearchByGeneSequence from "./main-app/components/SearchByGeneSequence.jsx";
 import SearchByGenePositionRange from "./main-app/components/SearchByGenePositionRange.jsx";
 import ExportGeneSequence from "./main-app/components/ExtractNuqSequence.jsx";
-import AddData from "./hidden-feature/components/AddData.jsx";
+import HiddenFeature from "./hidden-feature/components/HiddenFeature.jsx";
 import Intro from "./app-components/Intro.jsx";
 import Laboratories from "./app-components/Laboratories.jsx";
+import AddNewGenomeToDatabase from "./hidden-feature/components/AddNewGenomeToDatabase.jsx";
+import AddNucleotideSeq from "./hidden-feature/components/AddNucleotideSeq.jsx";
 
 const App = () => {
   const currentTheme = useSelector((state) => state.element.toggleTheme);
+  console.log("New Version : 1.0.0");
 
   const theme = useMemo(
     () =>
@@ -65,7 +68,15 @@ const App = () => {
               element={<ExportGeneSequence />}
             />
           </Route>
-          <Route path="/add-new-genome-data" element={<AddData />} />
+          <Route path="/add-new-genome-data" element={<HiddenFeature />} />
+          <Route
+            path="/add-new-genome-data/upload-to-database"
+            element={<AddNewGenomeToDatabase />}
+          />
+          <Route
+            path="/add-new-genome-data/upload-nucleotide-seq"
+            element={<AddNucleotideSeq />}
+          />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

@@ -2,7 +2,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
 import { Routes, Route } from "react-router-dom";
 import VisualizedData from "../main-app/components/VisualizedData";
-import AddData from "../hidden-feature/components/AddData";
+import AddData from "../hidden-feature/components/AddNewGenomeToDatabase";
 import DialogBox from "../main-app/components/DialogBox";
 import SearchByGenePositionRange from "../main-app/components/SearchByGenePositionRange";
 import SearchByGeneSize from "../main-app/components/SearchByGeneSize";

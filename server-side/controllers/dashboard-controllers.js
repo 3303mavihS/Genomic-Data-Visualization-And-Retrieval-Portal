@@ -2,20 +2,20 @@ import { database } from "../app.js";
 import { ObjectId } from "mongodb";
 import path from "path";
 import fs from "fs";
+import { __filename, __dirname } from "../app.js";
 import { fileURLToPath } from "url";
 
 //file path constants
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 //this will return the last Row's End value so that it can be used on front end
 export const returnLastPointOfData = async (req, res) => {
   try {
-    const {dat} = req.query;
+    const { dat } = req.query;
     //console.log(dat);
     const collection = database.collection(dat);
-    
+
     // Ensure we treat "End" as a number and sort by "End" in descending order
     const highestEndDocument = await collection
       .aggregate([
@@ -47,6 +47,27 @@ export const returnLastPointOfData = async (req, res) => {
   }
 };
 
+//this will return the total length of the file
+export const returnLengthOfSequence = async (req, res) => {
+  try {
+    const { dat } = req.query;
+    // Directory and file paths
+    const uploadDir = path.join(__dirname, "/data/export/genome");
+    const filePath = path.join(uploadDir, `${dat}.txt`);
+    console.log(filePath);
+    // Read the file content
+    const fileContent = await fs.promises.readFile(filePath, "utf8");
+
+    // Calculate the length of the file content (number of characters)
+    const length = fileContent.length;
+    // console.log(length);
+    res.status(200).json({ length });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ error_message: err.message });
+  }
+};
+
 //this function will take params and query values so that it can take be used to filter the
 //data from the database
 export const returnSlideData = async (req, res) => {
@@ -54,11 +75,11 @@ export const returnSlideData = async (req, res) => {
     const { slideNo } = req.params; // Get slide number from the path
     const begin = parseInt(req.query.begin, 10); // Convert begin to an integer
     const end = parseInt(req.query.end, 10); // Convert end to an integer
-   
+
     // Use slideNo, begin, and end as needed, e.g.
     //console.log(`Slide Number: ${slideNo}, Begin: ${begin}, End: ${end}`);
     //return the response
-    const {dat} = req.query;
+    const { dat } = req.query;
     //console.log(dat);
     const collection = database.collection(dat);
 
@@ -99,7 +120,7 @@ export const returnSearchByGenePositionRange = async (req, res) => {
     // //console.log(
     //   `Adjusted Begin: ${adjustedBegin}, Adjusted End: ${adjustedEnd}`
     // );
-    const {dat} = req.query;
+    const { dat } = req.query;
     //console.log(dat);
     const collection = database.collection(dat);
 
@@ -137,7 +158,7 @@ export const returnGeneData = async (req, res) => {
       return res.status(400).json({ error_message: "Gene ID is required" });
     }
 
-    const {dat} = req.query;
+    const { dat } = req.query;
     //console.log(dat);
     const collection = database.collection(dat);
 
@@ -159,7 +180,7 @@ export const returnGeneData = async (req, res) => {
 export const returnGeneDataByNextPrevBtn = async (req, res) => {
   try {
     //code
-    const { gene_slno,dat } = req.query;
+    const { gene_slno, dat } = req.query;
     if (!gene_slno) {
       return res.status(400).json({ error_message: "gene_slno is required" });
     }
@@ -194,7 +215,7 @@ export const returnGeneBySeq = async (req, res) => {
     }
     // Log the received sequence for debugging
     //console.log("Received gene sequence:", gene_seq);
-    const {dat} = req.query;
+    const { dat } = req.query;
     //console.log(dat);
     const collection = database.collection(dat);
     // Find the gene by NucleotideSeq
@@ -233,7 +254,7 @@ export const returnGeneByLength = async (req, res) => {
     // );
 
     // Access the collection
-    const {dat} = req.query;
+    const { dat } = req.query;
     //console.log(dat);
     const collection = database.collection(dat);
 
@@ -292,31 +313,31 @@ export const returnGeneByLength = async (req, res) => {
 };
 
 //export the gene sequence based on start and end index
-export const exportGeneSequence = async (req,res)=>{
-  const { beginIndex, endIndex,dat } = req.query;
+export const exportGeneSequence = async (req, res) => {
+  const { beginIndex, endIndex, dat } = req.query;
   // Check if indices are provided and are valid numbers
   if (!beginIndex || !endIndex || isNaN(beginIndex) || isNaN(endIndex)) {
     return res.status(400).send("Invalid indices provided.");
   }
   // //console.log(beginIndex,endIndex);
-  const begin = parseInt(beginIndex)-1;
+  const begin = parseInt(beginIndex) - 1;
   const end = parseInt(endIndex);
-  
+
   if (begin < 0) {
     begin = 0;
-}
+  }
 
   try {
     // Step 1: Read the sequence from the local file
-    const filePath = path.join(__dirname, "../data/export/genome/"+dat+".txt");
-    //console.log(filePath);
+    const filePath = path.join(
+      __dirname,
+      "/data/export/genome/" + dat + ".txt"
+    );
+    console.log(filePath);
     const fullSequence = fs.readFileSync(filePath, "utf8");
 
     // Step 2: Extract the substring based on provided indices
-    const sequencePart = fullSequence.substring(
-      begin,
-      end
-    );
+    const sequencePart = fullSequence.substring(begin, end);
 
     // Break the sequence into 16-character lines
     const lines = [];
@@ -327,9 +348,17 @@ export const exportGeneSequence = async (req,res)=>{
     }
 
     // Join the lines with newline characters
-    const formattedSequence = lines.join('\n');
+    const formattedSequence = lines.join("\n");
 
-    const file_content = ">ralstonia:"+beginIndex+":"+endIndex+":- len="+(end-begin)+"\n"+formattedSequence;
+    const file_content =
+      ">ralstonia:" +
+      beginIndex +
+      ":" +
+      endIndex +
+      ":- len=" +
+      (end - begin) +
+      "\n" +
+      formattedSequence;
 
     // Step 3: Create a temporary file with the extracted sequence
     const tempFilePath = path.join(__dirname, "temp_sequence.txt");
@@ -343,33 +372,32 @@ export const exportGeneSequence = async (req,res)=>{
       // Delete the temporary file after sending it
       fs.unlinkSync(tempFilePath);
     });
-  }catch (err) {
+  } catch (err) {
     //console.log(err.message);
     res.status(500).json({ error_message: err.message });
   }
-
-}
+};
 
 //return the result of the keyword found in the database of gene data
 export const returnSearchInGeneData = async (req, res) => {
-  
-  
   try {
     // Access the collection
     // const collection = database.collection("modified_ralstoniagenedetails");
-    const { keyword,dat } = req.query;
-  // //console.log(`Searching for keyword: ${keyword}`);
+    const { keyword, dat } = req.query;
+    // //console.log(`Searching for keyword: ${keyword}`);
     //console.log(dat);
     const collection = database.collection(dat);
 
     // Perform a case-insensitive search on multiple fields using $or and $regex
-    const searchResult = await collection.find({
-      $or: [
-        { Label: { $regex: keyword, $options: "i" } },
-        { Gene: { $regex: keyword, $options: "i" } },
-        { Product: { $regex: keyword, $options: "i" } },
-      ],
-    }).toArray();
+    const searchResult = await collection
+      .find({
+        $or: [
+          { Label: { $regex: keyword, $options: "i" } },
+          { Gene: { $regex: keyword, $options: "i" } },
+          { Product: { $regex: keyword, $options: "i" } },
+        ],
+      })
+      .toArray();
 
     // If no results found, return a 404
     // if (searchResult.length === 0) {
@@ -382,7 +410,7 @@ export const returnSearchInGeneData = async (req, res) => {
       const matchedFields = {};
 
       // Check each field and add it to matchedFields if it contains the keyword
-      ["Type","Label", "Gene", "Product"].forEach((field) => {
+      ["Type", "Label", "Gene", "Product"].forEach((field) => {
         if (doc[field] && new RegExp(keyword, "i").test(doc[field])) {
           matchedFields[field] = doc[field];
         }
@@ -401,4 +429,3 @@ export const returnSearchInGeneData = async (req, res) => {
     res.status(500).json({ error_message: err.message });
   }
 };
-

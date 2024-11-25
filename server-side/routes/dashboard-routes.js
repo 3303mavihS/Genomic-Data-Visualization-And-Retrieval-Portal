@@ -9,6 +9,7 @@ import {
   returnSlideData,
   returnSearchInGeneData,
   exportGeneSequence,
+  returnLengthOfSequence,
 } from "../controllers/dashboard-controllers.js";
 
 const router = express.Router();
@@ -23,9 +24,10 @@ router.get(`/slide/:slideNo/params`, returnSlideData);
 router.get("/get-range-data/params", returnSearchByGenePositionRange);
 router.get("/get-gene-data-by-length/params", returnGeneByLength);
 router.get("/get-gene-data/params", returnGeneData);
-router.get("/export-gene-sequence/params",exportGeneSequence);
+router.get("/export-gene-sequence/params", exportGeneSequence);
 router.get("/get-gene-data/by-slno/params", returnGeneDataByNextPrevBtn);
-router.get("/get-keyword-result/params",returnSearchInGeneData);
+router.get("/get-keyword-result/params", returnSearchInGeneData);
 router.post("/get-gene-data-by-seq/params", returnGeneBySeq);
+router.get("/get-total-length/params", returnLengthOfSequence);
 
 export default router;

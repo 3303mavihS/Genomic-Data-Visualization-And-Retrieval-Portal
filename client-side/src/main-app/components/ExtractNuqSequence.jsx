@@ -7,10 +7,13 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import { useSelector } from "react-redux";
-import { serverExportGeneSequenceUrl } from "../services/mainAppApiCallConstants";
+import {
+  serverExportGeneSequenceUrl,
+  serverGetTotalLengthOfFile,
+} from "../services/mainAppApiCallConstants";
 
 const validateInputs = (begin, end) => {
-  const maxLimit = 5000;
+  const maxLimit = getLastValue();
 
   // Ensure values are numbers
   begin = Number(begin);
@@ -41,6 +44,19 @@ const validateInputs = (begin, end) => {
   }
 
   return true;
+};
+
+const getLastValue = async () => {
+  try {
+    const dat = localStorage.getItem("dat");
+    const url = serverGetTotalLengthOfFile + "?dat=" + dat;
+    const response = await fetch(url);
+    const data = await response.json();
+    //console.log(data);
+    return data;
+  } catch (err) {
+    console.error("Error message:", err.message);
+  }
 };
 
 const ExtractNuqSequence = () => {
