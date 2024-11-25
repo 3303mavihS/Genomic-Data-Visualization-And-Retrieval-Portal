@@ -13,7 +13,7 @@ client-side/.env
 server-side/.env
 server-side/data/
 server-side/data/sample/download
-
+server-side/data/export
 server-side/data/uploads
 genomic_portal
 node_modules
